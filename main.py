@@ -1,14 +1,26 @@
 def input_trigger():
-	user_input = input("input full codec 8E packet or type EXIT ")
+	print("Type PARSER to start the parser")
+	print("Type SERVER to start the server")
+	print("Type EXIT to stop the program")
+	user_input = input("type one of the three choices please! ")
 	if user_input.upper() == "EXIT":
 		print(f"exiting program............")
 		exit()
-	else:
+
+	elif user_input.upper() == "PARSER":
+		user_input = input("paste codec 8E full packet ")
 		try:
 			codec_8e_checker(user_input)
 		except Exception as e:
 			print(f"error occured: {e} enter proper Codec8E packet or EXIT!!!")
 			input_trigger()
+
+	elif user_input.upper() == "SERVER":
+		start_server_tigger()
+
+	else:
+		print("Invalid choice")
+		input_trigger()
 
 def codec_8e_checker(unchecked_packet):
 	if str(unchecked_packet[16:16+2]).upper() != "8E":
@@ -22,6 +34,8 @@ def codec_8e_checker(unchecked_packet):
 			print(f"error occured: {e} enter proper Codec8E packet or EXIT!!!")
 			input_trigger()
 
+def start_server_tigger():
+	print("server not ready yet - sorry")
 
 def codec_8e_parser(codec_8E_packet):
 
