@@ -1,3 +1,8 @@
+import socket
+
+HOST = socket.gethostbyname(socket.gethostname())  
+PORT = 7494  #change this to your port
+
 def input_trigger():
 	print("Type PARSER to start the parser")
 	print("Type SERVER to start the server")
@@ -35,7 +40,25 @@ def codec_8e_checker(unchecked_packet):
 			input_trigger()
 
 def start_server_tigger():
-	print("server not ready yet - sorry")
+	print("server unfinished and does almost nothing")
+	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+	    s.bind((HOST, PORT))
+	    while True:
+	            s.listen()
+	            conn, addr = s.accept()
+	            print(f"listening port {PORT}")
+	            with conn:
+	                print(f"Connected by {addr}")
+	                while True:
+	                    data = conn.recv(1280)	                    
+	                    print(f"data received = {data.hex()}")
+	                    record_number = codec_8e_checker(data.hex())
+	                    print(f"received records {record_number}")	                 
+	                    if not data:
+	                        break                    
+	                    #conn.sendall(data)
+	                    #print(f"sent data = {data}")
+
 
 def codec_8e_parser(codec_8E_packet):
 
@@ -207,7 +230,7 @@ def codec_8e_parser(codec_8E_packet):
 	total_records_parsed = avl_data_start[data_field_position:data_field_position+2]
 	print(f"total parsed records = {total_records_parsed}")
 	print()
-	input_trigger()
+	return number_of_records
 
 
 input_trigger()
