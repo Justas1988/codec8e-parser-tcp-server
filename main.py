@@ -50,22 +50,26 @@ def start_server_tigger():
 	    while True:
 	            s.listen()
 	            print(f"listening port {PORT}")
-	            conn, addr = s.accept()	            
+	            conn, addr = s.accept()	 
+	            conn.settimeout(10)           
 	            with conn:
 	                print(f"Connected by {addr}")
 	                while True:
-	                    data = conn.recv(1280)	                    
-	                    print(f"data received = {data.hex()}")
-	                    record_number = codec_8e_checker(data.hex())
-	                    print(f"received records {record_number}")	
-	                    print()                 
-	                    if not data or record_number == False:
-	                        break                    
-	                    record_response = (record_number).to_bytes(4, byteorder='big')                 
-
-	                    conn.sendall(record_response)
-	                    print(f"sent data = {record_response}")
-
+	                	try:
+		                    data = conn.recv(1280)	                    
+		                    print(f"data received = {data.hex()}")
+		                    record_number = codec_8e_checker(data.hex())
+		                    print(f"received records {record_number}")	
+		                    print()                 
+		                    if not data or record_number == False:
+		                        break                    
+		                    record_response = (record_number).to_bytes(4, byteorder='big')     
+		                    conn.sendall(record_response)
+		                    print(f"sent data = {record_response}")
+		                except socket.timeout:
+		                	print(f"Socket timed out. Closing connection with {addr}")
+		                	break
+                        	
 
 def codec_8e_parser(codec_8E_packet): #think a lot before modifying  this function
 
