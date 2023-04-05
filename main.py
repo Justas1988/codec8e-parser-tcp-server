@@ -15,7 +15,8 @@ def input_trigger():
 	elif user_input.upper() == "PARSER":
 		user_input = input("paste codec 8E full packet ")
 		try:
-			codec_8e_checker(user_input)
+			if codec_8e_checker(user_input) == False:
+				input_trigger()
 		except Exception as e:
 			print(f"error occured: {e} enter proper Codec8E packet or EXIT!!!")
 			input_trigger()
@@ -29,12 +30,15 @@ def input_trigger():
 
 def codec_8e_checker(unchecked_packet):
 	if str(unchecked_packet[16:16+2]).upper() != "8E":
-		print(f"invalid packet")
-		input_trigger()
+		print()
+		print(f"invalid packet!!!!!!!!!!!!!!!!!!!")
+		print()
+		return False
 	else:
 		try:
 			checked_packet = unchecked_packet
-			codec_8e_parser(checked_packet)
+			return codec_8e_parser(checked_packet)
+
 		except Exception as e:
 			print(f"error occured: {e} enter proper Codec8E packet or EXIT!!!")
 			input_trigger()
@@ -45,22 +49,25 @@ def start_server_tigger():
 	    s.bind((HOST, PORT))
 	    while True:
 	            s.listen()
-	            conn, addr = s.accept()
 	            print(f"listening port {PORT}")
+	            conn, addr = s.accept()	            
 	            with conn:
 	                print(f"Connected by {addr}")
 	                while True:
 	                    data = conn.recv(1280)	                    
 	                    print(f"data received = {data.hex()}")
 	                    record_number = codec_8e_checker(data.hex())
-	                    print(f"received records {record_number}")	                 
-	                    if not data:
+	                    print(f"received records {record_number}")	
+	                    print()                 
+	                    if not data or record_number == False:
 	                        break                    
-	                    #conn.sendall(data)
-	                    #print(f"sent data = {data}")
+	                    record_response = (record_number).to_bytes(4, byteorder='big')                 
+
+	                    conn.sendall(record_response)
+	                    print(f"sent data = {record_response}")
 
 
-def codec_8e_parser(codec_8E_packet):
+def codec_8e_parser(codec_8E_packet): #think a lot before modifying  this function
 
 	print (str("codec 8 string entered - " + codec_8E_packet))
 
@@ -230,7 +237,7 @@ def codec_8e_parser(codec_8E_packet):
 	total_records_parsed = avl_data_start[data_field_position:data_field_position+2]
 	print(f"total parsed records = {total_records_parsed}")
 	print()
-	return number_of_records
+	return int(number_of_records)
 
 
 input_trigger()
