@@ -4,35 +4,31 @@ HOST = socket.gethostbyname(socket.gethostname())
 PORT = 7494  #change this to your port
 
 def input_trigger():
-	print("Type PARSER to start the parser")
-	print("Type SERVER to start the server")
+	print("Paste Codec 8E packet to parse it or:")
+	print("Type SERVER to start the server or:")
 	print("Type EXIT to stop the program")
-	user_input = input("type one of the three choices please! ")
+	user_input = input("waiting for input: ")
 	if user_input.upper() == "EXIT":
 		print(f"exiting program............")
-		exit()
-
-	elif user_input.upper() == "PARSER":
-		user_input = input("paste codec 8E full packet ")
-		try:
-			if codec_8e_checker(user_input) == False:
-				input_trigger()
-		except Exception as e:
-			print(f"error occured: {e} enter proper Codec8E packet or EXIT!!!")
-			input_trigger()
+		exit()	
 
 	elif user_input.upper() == "SERVER":
 		start_server_tigger()
 
-	else:
-		print("Invalid choice")
-		input_trigger()
+	else:		
+		try:
+			if codec_8e_checker(user_input) == False:
+				print("Wrong input or invalid Codec8E packet")
+				print()
+				input_trigger()
+		except Exception as e:
+			print(f"error occured: {e} enter proper Codec8E packet or EXIT!!!")
+			input_trigger()		
 
 def codec_8e_checker(unchecked_packet):
-	if str(unchecked_packet[16:16+2]).upper() != "8E":
-		print()
-		print(f"invalid packet!!!!!!!!!!!!!!!!!!!")
-		print()
+	if str(unchecked_packet[16:16+2]).upper() != "8E":	
+		print()	
+		print(f"Invalid packet!!!!!!!!!!!!!!!!!!!")		
 		return False
 	else:
 		try:
@@ -40,7 +36,7 @@ def codec_8e_checker(unchecked_packet):
 			return codec_8e_parser(checked_packet)
 
 		except Exception as e:
-			print(f"error occured: {e} enter proper Codec8E packet or EXIT!!!")
+			print(f"Error occured: {e} enter proper Codec8E packet or EXIT!!!")
 			input_trigger()
 
 def start_server_tigger():
