@@ -284,7 +284,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 
 		record_number += 1
 		
-		try:
+		try: #writing dictionary to ./data/data.json
 			json_printer(io_dict)
 		except Exception as e:
 			print(f"JSON writing error occured = {e}")
@@ -292,24 +292,19 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 		print()
 		print(io_dict)
 
-
-
 	total_records_parsed = avl_data_start[data_field_position:data_field_position+2]
 	print()
 	print(f"total parsed records = {total_records_parsed}")
 	print()
 	return int(number_of_records)
 
-def json_printer(io_dict):
+def json_printer(io_dict): #function to write JSON file with data
 	json_data = json.dumps(io_dict, indent=4)
 	data_path = "./data"
 	json_file = "data.json"
 
 	with open(os.path.join(data_path, json_file), "a") as file:
 		file.write(json_data)
-
 		return
-
-
 
 input_trigger()
