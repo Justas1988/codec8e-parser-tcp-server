@@ -1,4 +1,6 @@
 import socket
+import json
+import os
 
 HOST = socket.gethostbyname(socket.gethostname())  
 PORT = 7494  #change this to your port
@@ -15,7 +17,6 @@ def input_trigger(): #triggers user input
 
 	elif user_input.upper() == "SERVER":
 		start_server_tigger()
-
 	else:		
 		try:
 			if codec_8e_checker(user_input) == False:
@@ -282,14 +283,33 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 			pass
 
 		record_number += 1
+		
+		try:
+			json_printer(io_dict)
+		except Exception as e:
+			print(f"JSON writing error occured = {e}")
+
 		print()
 		print(io_dict)
+
+
 
 	total_records_parsed = avl_data_start[data_field_position:data_field_position+2]
 	print()
 	print(f"total parsed records = {total_records_parsed}")
 	print()
 	return int(number_of_records)
+
+def json_printer(io_dict):
+	json_data = json.dumps(io_dict, indent=4)
+	data_path = "./data"
+	json_file = "data.json"
+
+	with open(os.path.join(data_path, json_file), "a") as file:
+		file.write(json_data)
+
+		return
+
 
 
 input_trigger()
