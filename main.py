@@ -3,7 +3,7 @@ import socket
 HOST = socket.gethostbyname(socket.gethostname())  
 PORT = 7494  #change this to your port
 
-def input_trigger():
+def input_trigger(): #triggers user input
 	print("Paste Codec 8E packet to parse it or:")
 	print("Type SERVER to start the server or:")
 	print("Type EXIT to stop the program")
@@ -25,7 +25,7 @@ def input_trigger():
 			print(f"error occured: {e} enter proper Codec8E packet or EXIT!!!")
 			input_trigger()		
 
-def codec_8e_checker(unchecked_packet):
+def codec_8e_checker(unchecked_packet): #does some basic check if codec is 8E, and passes it to parse function (checks must be improved later)
 	if str(unchecked_packet[16:16+2]).upper() != "8E":	
 		print()	
 		print(f"Invalid packet!!!!!!!!!!!!!!!!!!!")		
@@ -39,7 +39,31 @@ def codec_8e_checker(unchecked_packet):
 			print(f"Error occured: {e} enter proper Codec8E packet or EXIT!!!")
 			input_trigger()
 
-def start_server_tigger():
+def imei_checker(hex_imei): #IMEI checker function
+	imei_length = int(hex_imei[:4], 16)
+	print(f"IMEI length = {imei_length}")
+	if imei_length != len(hex_imei[4:]) / 2:
+		print(f"IMEI length is not correct!")
+		return False
+	else:
+		pass
+
+	ascii_imei = bytes.fromhex(hex_imei[4:]).decode()
+	print(f"IMEI received = {ascii_imei}")
+	if not ascii_imei.isnumeric() or len(ascii_imei) != 15:
+		print(f"IMEI is not numeric!")
+		return False
+	else:
+		pass
+
+	digits = [int(d) for d in ascii_imei] #calculate Luhn checksum (not used currenlty)
+	check_sum = sum(digits[-2::-2] + [sum(divmod(d * 2, 10)) for d in digits[-1::-2]]) % 10
+#	print(f"IMEI does not pass Luhn checksum - IMEI is not valid")
+#	print(check_sum == 0)
+#	return check_sum == 0
+	return True
+
+def start_server_tigger(): #triggers server
 	print("server unfinished and does almost nothing")
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 	    s.bind((HOST, PORT))
@@ -54,14 +78,21 @@ def start_server_tigger():
 	                	try:
 		                    data = conn.recv(1280)	                    
 		                    print(f"data received = {data.hex()}")
-		                    record_number = codec_8e_checker(data.hex())
-		                    print(f"received records {record_number}")	
-		                    print()                 
-		                    if not data or record_number == False:
-		                        break                    
-		                    record_response = (record_number).to_bytes(4, byteorder='big')     
-		                    conn.sendall(record_response)
-		                    print(f"sent data = {record_response}")
+		                    if not data:
+		                    	break
+		                    elif imei_checker(data.hex()) != False:
+		                    	conn.sendall((1).to_bytes(1, byteorder="big"))
+		                    elif codec_8e_checker(data.hex()) != False:
+		                    	record_number = codec_8e_checker(data.hex())
+		                    	print(f"received records {record_number}")	
+		                    	print()  
+		                    	record_response = (record_number).to_bytes(4, byteorder="big")     
+		                    	conn.sendall(record_response)
+		                    	print(f"sent data = {record_response}") 
+		                    else:
+		                    	print(f"no expected DATA received - dropping connection")
+		                    	break                        
+		             
 		                except socket.timeout:
 		                	print(f"Socket timed out. Closing connection with {addr}")
 		                	break
