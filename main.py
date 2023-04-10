@@ -7,6 +7,7 @@ def input_trigger(): #triggers user input
 	print("Paste Codec 8E packet to parse it or:")
 	print("Type SERVER to start the server or:")
 	print("Type EXIT to stop the program")
+	device_imei = "default_IMEI"
 	user_input = input("waiting for input: ")
 	if user_input.upper() == "EXIT":
 		print(f"exiting program............")
@@ -21,19 +22,23 @@ def input_trigger(): #triggers user input
 				print("Wrong input or invalid Codec8E packet")
 				print()
 				input_trigger()
+			else:
+				codec_parser_trigger(user_input, device_imei)
 		except Exception as e:
 			print(f"error occured: {e} enter proper Codec8E packet or EXIT!!!")
 			input_trigger()		
 
-def codec_8e_checker(unchecked_packet): #does some basic check if codec is 8E, and passes it to parse function (checks must be improved later)
-	if str(unchecked_packet[16:16+2]).upper() != "8E":	
+def codec_8e_checker(codec8_packet): #does some basic check if codec is 8E, and passes it to parse function (checks must be improved later)
+	if str(codec8_packet[16:16+2]).upper() != "8E":	
 		print()	
 		print(f"Invalid packet!!!!!!!!!!!!!!!!!!!")		
 		return False
 	else:
-		try:
-			checked_packet = unchecked_packet
-			return codec_8e_parser(checked_packet)
+		return True
+
+def codec_parser_trigger(codec8_packet, device_imei):
+		try:			
+			return codec_8e_parser(codec8_packet, device_imei)
 
 		except Exception as e:
 			print(f"Error occured: {e} enter proper Codec8E packet or EXIT!!!")
@@ -41,20 +46,23 @@ def codec_8e_checker(unchecked_packet): #does some basic check if codec is 8E, a
 
 def imei_checker(hex_imei): #IMEI checker function
 	imei_length = int(hex_imei[:4], 16)
-	print(f"IMEI length = {imei_length}")
+#	print(f"IMEI length = {imei_length}")
 	if imei_length != len(hex_imei[4:]) / 2:
-		print(f"IMEI length is not correct!")
+		print(f"Not an IMEI - length is not correct!")
 		return False
 	else:
 		pass
 
-	ascii_imei = bytes.fromhex(hex_imei[4:]).decode()
+	ascii_imei = ascii_imei_converter(hex_imei)
 	print(f"IMEI received = {ascii_imei}")
 	if not ascii_imei.isnumeric() or len(ascii_imei) != 15:
-		print(f"IMEI is not numeric!")
+		print(f"Not an IMEI - is not numeric!")
 		return False
 	else:
 		return True
+
+def ascii_imei_converter(hex_imei):
+	return bytes.fromhex(hex_imei[4:]).decode()
 
 def start_server_tigger(): #triggers server
 	print("Starting server!")
@@ -64,9 +72,10 @@ def start_server_tigger(): #triggers server
 	            s.listen()
 	            print(f"listening port {PORT}")
 	            conn, addr = s.accept()	 
-	            conn.settimeout(10)           
+	            conn.settimeout(20)           
 	            with conn:
 	                print(f"Connected by {addr}")
+	               	device_imei = "default_IMEI"
 	                while True:
 	                	try:
 		                    data = conn.recv(1280)	                    
@@ -74,12 +83,15 @@ def start_server_tigger(): #triggers server
 		                    if not data:
 		                    	break
 		                    elif imei_checker(data.hex()) != False:
+		                    	device_imei = ascii_imei_converter(data.hex())
 		                    	imei_reply = (1).to_bytes(1, byteorder="big")
 		                    	conn.sendall(imei_reply)
+		                    	print(device_imei)
 		                    	print (f"sending reply = {imei_reply}")
 		                    elif codec_8e_checker(data.hex()) != False:
-		                    	record_number = codec_8e_checker(data.hex())
-		                    	print(f"received records {record_number}")	
+		                    	record_number = codec_parser_trigger(data.hex(), device_imei)
+		                    	print(f"received records {record_number}")
+		                    	print(device_imei)	
 		                    	print()  
 		                    	record_response = (record_number).to_bytes(4, byteorder="big")     
 		                    	conn.sendall(record_response)
@@ -93,8 +105,8 @@ def start_server_tigger(): #triggers server
 		                	break
                         	
 
-def codec_8e_parser(codec_8E_packet): #think a lot before modifying  this function
-
+def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying  this function
+	print()
 	print (str("codec 8 string entered - " + codec_8E_packet))
 
 	zero_bytes = codec_8E_packet[:8]
@@ -114,6 +126,7 @@ def codec_8e_parser(codec_8E_packet): #think a lot before modifying  this functi
 	data_field_position = 0
 	while data_field_position < (2*data_field_length-6):
 		io_dict = {}
+		io_dict["deviceIMEI"] = device_imei
 		print()
 		print (f"data from record {record_number}")	
 		print (f"########################################")
@@ -262,16 +275,18 @@ def codec_8e_parser(codec_8E_packet): #think a lot before modifying  this functi
 				io_dict[key] = value		
 				data_field_position += len(value)
 				print(f"avl_ID: {int(key, 16)} : {value}")
-				print (f"data field postition = {data_field_position}")
-				print (f"data_field_length = {2*data_field_length}")
+			#	print (f"data field postition = {data_field_position}")
+			#	print (f"data_field_length = {2*data_field_length}")
 				i += 1
 		else:
 			pass
 
 		record_number += 1
+		print()
 		print(io_dict)
 
 	total_records_parsed = avl_data_start[data_field_position:data_field_position+2]
+	print()
 	print(f"total parsed records = {total_records_parsed}")
 	print()
 	return int(number_of_records)
