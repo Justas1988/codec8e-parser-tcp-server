@@ -54,14 +54,7 @@ def imei_checker(hex_imei): #IMEI checker function
 		print(f"IMEI is not numeric!")
 		return False
 	else:
-		pass
-
-	digits = [int(d) for d in ascii_imei] #calculate Luhn checksum (not used currenlty)
-	check_sum = sum(digits[-2::-2] + [sum(divmod(d * 2, 10)) for d in digits[-1::-2]]) % 10
-#	print(f"IMEI does not pass Luhn checksum - IMEI is not valid")
-#	print(check_sum == 0)
-#	return check_sum == 0
-	return True
+		return True
 
 def start_server_tigger(): #triggers server
 	print("server unfinished and does almost nothing")
@@ -81,7 +74,9 @@ def start_server_tigger(): #triggers server
 		                    if not data:
 		                    	break
 		                    elif imei_checker(data.hex()) != False:
-		                    	conn.sendall((1).to_bytes(1, byteorder="big"))
+		                    	imei_reply = (1).to_bytes(1, byteorder="big")
+		                    	conn.sendall(imei_reply)
+		                    	print (f"sending reply = {imei_reply}")
 		                    elif codec_8e_checker(data.hex()) != False:
 		                    	record_number = codec_8e_checker(data.hex())
 		                    	print(f"received records {record_number}")	
