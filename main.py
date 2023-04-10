@@ -113,45 +113,55 @@ def codec_8e_parser(codec_8E_packet): #think a lot before modifying  this functi
 	avl_data_start = codec_8E_packet[20:]
 	data_field_position = 0
 	while data_field_position < (2*data_field_length-6):
+		io_dict = {}
 		print()
 		print (f"data from record {record_number}")	
 		print (f"########################################")
 		timestamp = avl_data_start[data_field_position:data_field_position+16]
+		io_dict["timestamp"] = timestamp
 		print (f"timestamp = {timestamp}")	
 		data_field_position += len(timestamp)
 
 		priority = avl_data_start[data_field_position:data_field_position+2]
+		io_dict["priority"] = priority
 		print (f"record priority = {priority}")
 
 		data_field_position += len(priority)
 
 		longtitude = avl_data_start[data_field_position:data_field_position+8]
+		io_dict["longtitude"] = longtitude
 		print (f"longtitude = {longtitude}")
 		data_field_position += len(longtitude)
 
 		latitude = avl_data_start[data_field_position:data_field_position+8]
 		print (f"latitude = {latitude}")
+		io_dict["latitude"] = latitude
 		data_field_position += len(latitude)
 
 		altitude = avl_data_start[data_field_position:data_field_position+4]
 		print(f"altitude = {altitude}")
+		io_dict["altitude"] = altitude
 		data_field_position += len(altitude)
 
 		angle = avl_data_start[data_field_position:data_field_position+4]
 		print(f"angle = {angle}")
+		io_dict["angle"] = angle
 		data_field_position += len(angle)
 
 		satelites = avl_data_start[data_field_position:data_field_position+2]
 		print(f"satelites = {satelites}")
+		io_dict["satelites"] = satelites
 		data_field_position += len(satelites)
 
 		speed = avl_data_start[data_field_position:data_field_position+4]
+		io_dict["speed"] = speed
 		print(f"speed = {speed}")
 		data_field_position += len(speed)
 
-		even_io_id = avl_data_start[data_field_position:data_field_position+4]
-		print(f"event ID = {int(even_io_id, 16)}")
-		data_field_position += len(even_io_id)
+		event_io_id = avl_data_start[data_field_position:data_field_position+4]
+		io_dict["eventID"] = event_io_id		
+		print(f"event ID = {int(event_io_id, 16)}")
+		data_field_position += len(event_io_id)
 
 		total_io_elements = avl_data_start[data_field_position:data_field_position+4]
 		total_io_elements_parsed = int(total_io_elements, 16)
@@ -162,7 +172,7 @@ def codec_8e_parser(codec_8E_packet): #think a lot before modifying  this functi
 		byte1_io_number_parsed = int(byte1_io_number, 16)
 		print(f"1 byte io count = {byte1_io_number_parsed}")
 		data_field_position += len(byte1_io_number)
-		io_dict = {}
+		
 
 		if byte1_io_number_parsed > 0:
 			i = 1				
@@ -259,6 +269,7 @@ def codec_8e_parser(codec_8E_packet): #think a lot before modifying  this functi
 			pass
 
 		record_number += 1
+		print(io_dict)
 
 	total_records_parsed = avl_data_start[data_field_position:data_field_position+2]
 	print(f"total parsed records = {total_records_parsed}")
