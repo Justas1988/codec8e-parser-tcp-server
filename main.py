@@ -57,7 +57,7 @@ def imei_checker(hex_imei): #IMEI checker function
 		return True
 
 def start_server_tigger(): #triggers server
-	print("server unfinished and does almost nothing")
+	print("Starting server!")
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 	    s.bind((HOST, PORT))
 	    while True:
