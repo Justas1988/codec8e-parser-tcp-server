@@ -39,6 +39,7 @@ AVL IDs and Raw values ar saved in ./data/data.json
 
 - Install latest Python version from: https://www.python.org/
 - Download "main.py" and Data folder: ./data/data.json
+- Open "main.py" with any text editor, change 'port' to YOUR open Port
 - Run "main.py" via terminal
 - Follow on screen instructions
 
