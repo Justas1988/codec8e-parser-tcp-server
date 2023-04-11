@@ -73,15 +73,18 @@ def start_server_tigger(): #triggers server
 	    while True:
 	            s.listen()
 	            print(f"listening port {PORT}")
+	            print (f" -- { time_stamper() }")
 	            conn, addr = s.accept()	 
 	            conn.settimeout(20)           
 	            with conn:
 	                print(f"Connected by {addr}")
+	                print (f" -- { time_stamper() }")
 	               	device_imei = "default_IMEI"
 	                while True:
 	                	try:
 		                    data = conn.recv(1280)	                    
 		                    print(f"data received = {data.hex()}")
+		                    print (f" -- { time_stamper() }")
 		                    if not data:
 		                    	break
 		                    elif imei_checker(data.hex()) != False:
@@ -90,6 +93,7 @@ def start_server_tigger(): #triggers server
 		                    	conn.sendall(imei_reply)
 		                    	print(device_imei)
 		                    	print (f"sending reply = {imei_reply}")
+		                    	print (f" -- { time_stamper() }")
 		                    elif codec_8e_checker(data.hex()) != False:
 		                    	record_number = codec_parser_trigger(data.hex(), device_imei)
 		                    	print(f"received records {record_number}")
@@ -98,8 +102,10 @@ def start_server_tigger(): #triggers server
 		                    	record_response = (record_number).to_bytes(4, byteorder="big")     
 		                    	conn.sendall(record_response)
 		                    	print(f"response sent = {record_response.hex()}") 
+		                    	print (f" -- { time_stamper() }")
 		                    else:
 		                    	print(f"no expected DATA received - dropping connection")
+		                    	print (f" -- { time_stamper() }")
 		                    	break                        
 		             
 		                except socket.timeout:
@@ -126,12 +132,10 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 	record_number = 1
 	avl_data_start = codec_8E_packet[20:]
 	data_field_position = 0
-	while data_field_position < (2*data_field_length-6):
-		current_server_time = datetime.datetime.now()
-		server_time_stamp = current_server_time.strftime("%H:%M:%S %d-%m-%Y")
+	while data_field_position < (2*data_field_length-6):		
 		io_dict = {}
 		io_dict["deviceIMEI"] = device_imei
-		io_dict["Server_time"] = server_time_stamp
+		io_dict["Server_time"] = time_stamper()
 		print()
 		print (f"data from record {record_number}")	
 		print (f"########################################")
@@ -310,5 +314,10 @@ def json_printer(io_dict): #function to write JSON file with data
 	with open(os.path.join(data_path, json_file), "a") as file:
 		file.write(json_data)
 		return
+
+def time_stamper():
+	current_server_time = datetime.datetime.now()
+	server_time_stamp = current_server_time.strftime("%H:%M:%S %d-%m-%Y")
+	return server_time_stamp
 
 input_trigger()
