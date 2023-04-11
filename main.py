@@ -311,9 +311,18 @@ def json_printer(io_dict): #function to write JSON file with data
 	data_path = "./data"
 	json_file = "data.json"
 
-	with open(os.path.join(data_path, json_file), "a") as file:
-		file.write(json_data)
-		return
+	if not os.path.exists(data_path):
+		os.makedirs(data_path)
+	else:
+		pass
+
+	if not os.path.exists(os.path.join(data_path, json_file)):
+		with open(os.path.join(data_path, json_file), "w") as file:
+			file.write(json_data)
+	else:
+		with open(os.path.join(data_path, json_file), "a") as file:
+			file.write(json_data)
+	return
 
 def time_stamper():
 	current_server_time = datetime.datetime.now()
