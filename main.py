@@ -1,6 +1,7 @@
 import socket
 import json
 import os
+import datetime
 
 HOST = socket.gethostbyname(socket.gethostname())  
 PORT = 7494  #change this to your port
@@ -126,8 +127,11 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 	avl_data_start = codec_8E_packet[20:]
 	data_field_position = 0
 	while data_field_position < (2*data_field_length-6):
+		current_server_time = datetime.datetime.now()
+		server_time_stamp = current_server_time.strftime("%H:%M:%S %d-%m-%Y")
 		io_dict = {}
 		io_dict["deviceIMEI"] = device_imei
+		io_dict["Server_time"] = server_time_stamp
 		print()
 		print (f"data from record {record_number}")	
 		print (f"########################################")
