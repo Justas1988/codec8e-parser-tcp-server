@@ -92,11 +92,11 @@ def start_server_tigger(): #triggers server
 		                    elif codec_8e_checker(data.hex()) != False:
 		                    	record_number = codec_parser_trigger(data.hex(), device_imei)
 		                    	print(f"received records {record_number}")
-		                    	print(device_imei)	
+		                    	print(f"from device IMEI = {device_imei}")	
 		                    	print()  
 		                    	record_response = (record_number).to_bytes(4, byteorder="big")     
 		                    	conn.sendall(record_response)
-		                    	print(f"sent data = {record_response}") 
+		                    	print(f"response sent = {record_response.hex()}") 
 		                    else:
 		                    	print(f"no expected DATA received - dropping connection")
 		                    	break                        
@@ -108,7 +108,7 @@ def start_server_tigger(): #triggers server
 
 def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying  this function
 	print()
-	print (str("codec 8 string entered - " + codec_8E_packet))
+#	print (str("codec 8 string entered - " + codec_8E_packet))
 
 	zero_bytes = codec_8E_packet[:8]
 	print()
@@ -292,7 +292,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 		print()
 		print(io_dict)
 
-	total_records_parsed = avl_data_start[data_field_position:data_field_position+2]
+	total_records_parsed = int(avl_data_start[data_field_position:data_field_position+2], 16)
 	print()
 	print(f"total parsed records = {total_records_parsed}")
 	print()
