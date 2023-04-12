@@ -135,7 +135,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 		print (f"########################################")
 		timestamp = avl_data_start[data_field_position:data_field_position+16]
 		io_dict["_timestamp_"] = device_time_stamper(timestamp)
-		print (f"timestamp = {timestamp}")	
+		print (f"timestamp = {device_time_stamper(timestamp)}")	
 		data_field_position += len(timestamp)
 
 		priority = avl_data_start[data_field_position:data_field_position+2]
