@@ -328,8 +328,9 @@ def device_time_stamper(timestamp):
 	timestamp_utc = datetime.datetime.utcfromtimestamp(timestamp_ms)
 	utc_offset = datetime.datetime.fromtimestamp(timestamp_ms) - datetime.datetime.utcfromtimestamp(timestamp_ms)
 	timestamp_local = timestamp_utc + utc_offset
-	formatted_timestamp = timestamp_local.strftime("%H:%M:%S %d-%m-%Y")
-
+	formatted_timestamp_local = timestamp_local.strftime("%H:%M:%S %d-%m-%Y")
+	formatted_timestamp_utc = timestamp_utc.strftime("%H:%M:%S %d-%m-%Y")
+	formatted_timestamp = f"{formatted_timestamp_local} (local) / {formatted_timestamp_utc} (utc)"
 
 	return formatted_timestamp
 
