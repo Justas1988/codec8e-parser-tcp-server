@@ -33,6 +33,8 @@ AVL IDs and Raw values ar saved in ./data/data.json
 - Codec 8 (not extended support) - not done yet
 - AVL IDs value parsing - not done yet
 - User interface via Browser - not done yet
+- Limiting data.json file to X MB in size, and create new ones - not done yet
+- Make server multithreaded (code rewrite may be required) - not done yet
 - More... - not done yet
 
 ### How to test?:
