@@ -72,19 +72,16 @@ def start_server_tigger(): #triggers server
 	    s.bind((HOST, PORT))
 	    while True:
 	            s.listen()
-	            print(f"listening port {PORT}")
-	            print (f" -- { time_stamper() }")
+	            print(f"// {time_stamper()} // listening port {PORT}")	           
 	            conn, addr = s.accept()	 
 	            conn.settimeout(20)           
 	            with conn:
-	                print(f"Connected by {addr}")
-	                print (f" -- { time_stamper() }")
+	                print(f"// {time_stamper()} // Connected by {addr}")	               
 	               	device_imei = "default_IMEI"
 	                while True:
 	                	try:
 		                    data = conn.recv(1280)	                    
-		                    print(f"data received = {data.hex()}")
-		                    print (f" -- { time_stamper() }")
+		                    print(f"// {time_stamper()} // data received = {data.hex()}")		                   
 		                    if not data:
 		                    	break
 		                    elif imei_checker(data.hex()) != False:
@@ -92,8 +89,7 @@ def start_server_tigger(): #triggers server
 		                    	imei_reply = (1).to_bytes(1, byteorder="big")
 		                    	conn.sendall(imei_reply)
 		                    	print(device_imei)
-		                    	print (f"sending reply = {imei_reply}")
-		                    	print (f" -- { time_stamper() }")
+		                    	print (f"-- {time_stamper()} sending reply = {imei_reply}")		                    	
 		                    elif codec_8e_checker(data.hex()) != False:
 		                    	record_number = codec_parser_trigger(data.hex(), device_imei)
 		                    	print(f"received records {record_number}")
@@ -101,15 +97,13 @@ def start_server_tigger(): #triggers server
 		                    	print()  
 		                    	record_response = (record_number).to_bytes(4, byteorder="big")     
 		                    	conn.sendall(record_response)
-		                    	print(f"response sent = {record_response.hex()}") 
-		                    	print (f" -- { time_stamper() }")
+		                    	print(f"// {time_stamper()} // response sent = {record_response.hex()}") 		                    	
 		                    else:
-		                    	print(f"no expected DATA received - dropping connection")
-		                    	print (f" -- { time_stamper() }")
+		                    	print(f"// {time_stamper()} // no expected DATA received - dropping connection")		                    	
 		                    	break                        
 		             
 		                except socket.timeout:
-		                	print(f"Socket timed out. Closing connection with {addr}")
+		                	print(f"// {time_stamper()} // Socket timed out. Closing connection with {addr}")
 		                	break
                         	
 
@@ -135,12 +129,12 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 	while data_field_position < (2*data_field_length-6):		
 		io_dict = {}
 		io_dict["deviceIMEI"] = device_imei
-		io_dict["Server_time"] = time_stamper()
+		io_dict["server_time"] = time_stamper()
 		print()
 		print (f"data from record {record_number}")	
 		print (f"########################################")
 		timestamp = avl_data_start[data_field_position:data_field_position+16]
-		io_dict["timestamp"] = timestamp
+		io_dict["_timestamp_"] = device_time_stamper(timestamp)
 		print (f"timestamp = {timestamp}")	
 		data_field_position += len(timestamp)
 
@@ -328,5 +322,15 @@ def time_stamper():
 	current_server_time = datetime.datetime.now()
 	server_time_stamp = current_server_time.strftime("%H:%M:%S %d-%m-%Y")
 	return server_time_stamp
+
+def device_time_stamper(timestamp):
+	timestamp_ms = int(timestamp, 16) / 1000
+	timestamp_utc = datetime.datetime.utcfromtimestamp(timestamp_ms)
+	utc_offset = datetime.datetime.fromtimestamp(timestamp_ms) - datetime.datetime.utcfromtimestamp(timestamp_ms)
+	timestamp_local = timestamp_utc + utc_offset
+	formatted_timestamp = timestamp_local.strftime("%H:%M:%S %d-%m-%Y")
+
+
+	return formatted_timestamp
 
 input_trigger()
