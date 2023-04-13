@@ -2,6 +2,7 @@ import socket
 import json
 import os
 import datetime
+import struct
 
 HOST = socket.gethostbyname(socket.gethostname())  
 PORT = 7494  #change this to your port
@@ -145,13 +146,13 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 		data_field_position += len(priority)
 
 		longtitude = avl_data_start[data_field_position:data_field_position+8]
-		io_dict["longtitude"] = longtitude
-		print (f"longtitude = {longtitude}")
+		io_dict["longtitude"] = struct.unpack('>i', bytes.fromhex(longtitude))[0]
+		print (f"longtitude = {struct.unpack('>i', bytes.fromhex(longtitude))[0]}")
 		data_field_position += len(longtitude)
 
 		latitude = avl_data_start[data_field_position:data_field_position+8]
-		print (f"latitude = {latitude}")
-		io_dict["latitude"] = latitude
+		print (f"latitude = {struct.unpack('>i', bytes.fromhex(latitude))[0]}")
+		io_dict["latitude"] = struct.unpack('>i', bytes.fromhex(latitude))[0]
 		data_field_position += len(latitude)
 
 		altitude = avl_data_start[data_field_position:data_field_position+4]
