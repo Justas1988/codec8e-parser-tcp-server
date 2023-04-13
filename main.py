@@ -140,8 +140,8 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 		data_field_position += len(timestamp)
 
 		priority = avl_data_start[data_field_position:data_field_position+2]
-		io_dict["priority"] = priority
-		print (f"record priority = {priority}")
+		io_dict["priority"] = int(priority, 16)
+		print (f"record priority = {int(priority, 16)}")
 
 		data_field_position += len(priority)
 
@@ -161,18 +161,18 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 		data_field_position += len(altitude)
 
 		angle = avl_data_start[data_field_position:data_field_position+4]
-		print(f"angle = {angle}")
-		io_dict["angle"] = angle
+		print(f"angle = {int(angle, 16)}")
+		io_dict["angle"] = int(angle, 16)
 		data_field_position += len(angle)
 
 		satelites = avl_data_start[data_field_position:data_field_position+2]
-		print(f"satelites = {satelites}")
-		io_dict["satelites"] = satelites
+		print(f"satelites = {int(satelites, 16)}")
+		io_dict["satelites"] = int(satelites, 16)
 		data_field_position += len(satelites)
 
 		speed = avl_data_start[data_field_position:data_field_position+4]
-		io_dict["speed"] = speed
-		print(f"speed = {speed}")
+		io_dict["speed"] = int(speed, 16)
+		print(f"speed = {int(speed, 16)}")
 		data_field_position += len(speed)
 
 		event_io_id = avl_data_start[data_field_position:data_field_position+4]
