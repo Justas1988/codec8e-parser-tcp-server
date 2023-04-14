@@ -156,8 +156,8 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 		data_field_position += len(latitude)
 
 		altitude = avl_data_start[data_field_position:data_field_position+4]
-		print(f"altitude = {altitude}")
-		io_dict["altitude"] = altitude
+		print(f"altitude = {int(altitude, 16)}")
+		io_dict["altitude"] = int(altitude, 16)
 		data_field_position += len(altitude)
 
 		angle = avl_data_start[data_field_position:data_field_position+4]
