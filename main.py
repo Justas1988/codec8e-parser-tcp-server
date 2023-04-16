@@ -220,7 +220,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 				data_field_position += len(key)
 
 				value = avl_data_start[data_field_position:data_field_position+4]
-				io_dict[int(key, 16)] = value
+				io_dict[int(key, 16)] = sorting_hat(int(key, 16), value)
 				data_field_position += len(value)
 				print (f"avl_ID: {int(key, 16)} : {value}")
 				i += 1
@@ -239,7 +239,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 				data_field_position += len(key)
 
 				value = avl_data_start[data_field_position:data_field_position+8]
-				io_dict[int(key, 16)] = value
+				io_dict[int(key, 16)] = sorting_hat(int(key, 16), value)
 				data_field_position += len(value)
 				print(f"avl_ID: {int(key, 16)} : {value}")
 				i += 1
@@ -258,7 +258,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 				data_field_position += len(key)
 
 				value = avl_data_start[data_field_position:data_field_position+16]
-				io_dict[int(key, 16)] = value
+				io_dict[int(key, 16)] = sorting_hat(int(key, 16), value)
 				data_field_position += len(value)
 				print(f"avl_ID: {int(key, 16)} : {value}")
 				i += 1
@@ -279,7 +279,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 				value_length = avl_data_start[data_field_position:data_field_position+4]
 				data_field_position += 4
 				value = avl_data_start[data_field_position:data_field_position+(2*(int(value_length, 16)))]
-				io_dict[int(key, 16)] = value		
+				io_dict[int(key, 16)] = sorting_hat(int(key, 16), value)		
 				data_field_position += len(value)
 				print(f"avl_ID: {int(key, 16)} : {value}")
 			#	print (f"data field postition = {data_field_position}")
