@@ -107,6 +107,9 @@ def start_server_tigger(): #triggers server
 		                	print(f"// {time_stamper()} // Socket timed out. Closing connection with {addr}")
 		                	break
                         	
+####################################################
+###############_Codec8E_parser_code_################
+####################################################
 
 def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying  this function
 	print()
@@ -301,6 +304,8 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 	print()
 	return int(number_of_records)
 
+####################################################
+
 def json_printer(io_dict): #function to write JSON file with data
 	json_data = json.dumps(io_dict, indent=4)
 	data_path = "./data"
@@ -345,7 +350,11 @@ def parse_data_integer(data):
 
 parse_functions_dictionary = { #this must simply be updated with new AVL IDs and their functions
 	240: parse_data_integer,
-	239: parse_data_integer
+	239: parse_data_integer,
+	80: parse_data_integer,
+	21: parse_data_integer,
+	200: parse_data_integer,
+	69: parse_data_integer
 }
 
 def sorting_hat(key, value):
