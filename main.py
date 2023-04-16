@@ -196,9 +196,9 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 			while i <= byte1_io_number_parsed:
 				key = avl_data_start[data_field_position:data_field_position+4]
 				data_field_position += len(key)
-
 				value = avl_data_start[data_field_position:data_field_position+2]
-				io_dict[int(key, 16)] = value
+
+				io_dict[int(key, 16)] = sorting_hat(int(key, 16), value)
 				data_field_position += len(value)
 				print (f"avl_ID: {int(key, 16)} : {value}")
 				i += 1
@@ -334,5 +334,28 @@ def device_time_stamper(timestamp):
 	formatted_timestamp = f"{formatted_timestamp_local} (local) / {formatted_timestamp_utc} (utc)"
 
 	return formatted_timestamp
+
+####################################################
+###############_PARSE_FUNCTIONS_CODE_###############
+####################################################
+
+def parse_data_integer(data):
+	return int(data, 16)
+
+
+parse_functions_dictionary = { #this must simply be updated with new AVL IDs and their functions
+	240: parse_data_integer,
+	239: parse_data_integer
+}
+
+def sorting_hat(key, value):
+	if key in parse_functions_dictionary:
+		parse_function = parse_functions_dictionary[key]
+		return parse_function(value)
+	else:
+		return value	
+
+####################################################
+
 
 input_trigger()
