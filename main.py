@@ -203,7 +203,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 
 				io_dict[int(key, 16)] = sorting_hat(int(key, 16), value)
 				data_field_position += len(value)
-				print (f"avl_ID: {int(key, 16)} : {value}")
+				print (f"avl_ID: {int(key, 16)} : {io_dict[int(key, 16)]}")
 				i += 1
 		else:
 			pass
@@ -222,7 +222,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 				value = avl_data_start[data_field_position:data_field_position+4]
 				io_dict[int(key, 16)] = sorting_hat(int(key, 16), value)
 				data_field_position += len(value)
-				print (f"avl_ID: {int(key, 16)} : {value}")
+				print (f"avl_ID: {int(key, 16)} : {io_dict[int(key, 16)]}")
 				i += 1
 		else:
 			pass
@@ -241,7 +241,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 				value = avl_data_start[data_field_position:data_field_position+8]
 				io_dict[int(key, 16)] = sorting_hat(int(key, 16), value)
 				data_field_position += len(value)
-				print(f"avl_ID: {int(key, 16)} : {value}")
+				print(f"avl_ID: {int(key, 16)} : {io_dict[int(key, 16)]}")
 				i += 1
 		else:
 			pass
@@ -260,7 +260,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 				value = avl_data_start[data_field_position:data_field_position+16]
 				io_dict[int(key, 16)] = sorting_hat(int(key, 16), value)
 				data_field_position += len(value)
-				print(f"avl_ID: {int(key, 16)} : {value}")
+				print(f"avl_ID: {int(key, 16)} : {io_dict[int(key, 16)]}")
 				i += 1
 		else:
 			pass
@@ -281,7 +281,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 				value = avl_data_start[data_field_position:data_field_position+(2*(int(value_length, 16)))]
 				io_dict[int(key, 16)] = sorting_hat(int(key, 16), value)		
 				data_field_position += len(value)
-				print(f"avl_ID: {int(key, 16)} : {value}")
+				print(f"avl_ID: {int(key, 16)} : {io_dict[int(key, 16)]}")
 			#	print (f"data field postition = {data_field_position}")
 			#	print (f"data_field_length = {2*data_field_length}")
 				i += 1
