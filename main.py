@@ -347,6 +347,13 @@ def device_time_stamper(timestamp):
 def parse_data_integer(data):
 	return int(data, 16)
 
+def int_multiply_01(data):
+	return (int(data, 16))*0.1
+
+def int_multiply_0001(data):
+	return (int(data, 16))*0.001
+
+
 
 parse_functions_dictionary = { #this must simply be updated with new AVL IDs and their functions
 	240: parse_data_integer,
@@ -354,7 +361,10 @@ parse_functions_dictionary = { #this must simply be updated with new AVL IDs and
 	80: parse_data_integer,
 	21: parse_data_integer,
 	200: parse_data_integer,
-	69: parse_data_integer
+	69: parse_data_integer,
+	181: int_multiply_01,
+	182: int_multiply_01,
+	66: int_multiply_0001
 }
 
 def sorting_hat(key, value):
