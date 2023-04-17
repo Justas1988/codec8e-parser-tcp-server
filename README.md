@@ -31,7 +31,7 @@ AVL IDs and Raw values ar saved in ./data/data.json
 ## Planed Features - not done yet:
 
 - Codec 8 (not extended support) - not done yet
-- AVL IDs value parsing - not done yet
+- AVL IDs value parsing - ~~not done yet~~ - progress ongoing
 - User interface via Browser - not done yet
 - Limiting data.json file to X MB in size, and create new ones - not done yet
 - Make server multithreaded (code rewrite may be required) - not done yet
@@ -40,7 +40,7 @@ AVL IDs and Raw values ar saved in ./data/data.json
 ### How to test?:
 
 - Install latest Python version from: https://www.python.org/
-- Download "main.py" and Data folder: ./data/data.json
+- Download "main.py" ~~and Data folder: ./data/data.json~~ - now created automatically
 - Open "main.py" with any text editor, change 'port' to YOUR open Port
 - Run "main.py" via terminal
 - Follow on screen instructions
