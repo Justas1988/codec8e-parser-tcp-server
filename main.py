@@ -364,7 +364,17 @@ parse_functions_dictionary = { #this must simply be updated with new AVL IDs and
 	69: parse_data_integer,
 	181: int_multiply_01,
 	182: int_multiply_01,
-	66: int_multiply_0001
+	66: int_multiply_0001,
+	24: parse_data_integer,
+	205: parse_data_integer,
+	206: parse_data_integer,
+	67: int_multiply_0001,
+	68: int_multiply_0001,
+	241: parse_data_integer,
+	299: parse_data_integer,
+	16: parse_data_integer,
+	1: parse_data_integer,
+	9: parse_data_integer
 }
 
 def sorting_hat(key, value):
