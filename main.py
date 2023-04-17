@@ -36,8 +36,8 @@ def input_trigger(): #triggers user input
 ####################################################
 
 def crc16_arc(data):    
-    data_part_length = int(data[8:16], 16)
-    data_part_for_crc = bytes.fromhex(data[16:16+2*data_part_length])
+    data_part_length_crc = int(data[8:16], 16)
+    data_part_for_crc = bytes.fromhex(data[16:16+2*data_part_length_crc])
     crc16_arc_from_record = data[-8:]    
     crc = 0
     
