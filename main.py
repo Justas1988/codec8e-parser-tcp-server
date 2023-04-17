@@ -59,7 +59,7 @@ def imei_checker(hex_imei): #IMEI checker function
 	ascii_imei = ascii_imei_converter(hex_imei)
 	print(f"IMEI received = {ascii_imei}")
 	if not ascii_imei.isnumeric() or len(ascii_imei) != 15:
-		print(f"Not an IMEI - is not numeric!")
+		print(f"Not an IMEI - is not numeric or wrong length!")
 		return False
 	else:
 		return True
