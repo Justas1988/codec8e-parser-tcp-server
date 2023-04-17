@@ -31,13 +31,40 @@ def input_trigger(): #triggers user input
 			print(f"error occured: {e} enter proper Codec8E packet or EXIT!!!")
 			input_trigger()		
 
+####################################################
+###############__CRC16/ARC Checker__################
+####################################################
+
+def crc16_arc(data):    
+    data_part_length = int(data[8:16], 16)
+    data_part_for_crc = bytes.fromhex(data[16:16+2*data_part_length])
+    crc16_arc_from_record = data[-8:]    
+    crc = 0
+    
+    for byte in data_part_for_crc:
+        crc ^= byte
+        for _ in range(8):
+            if crc & 1:
+                crc = (crc >> 1) ^ 0xA001
+            else:
+                crc >>= 1
+    
+    if crc16_arc_from_record.upper() == crc.to_bytes(4, byteorder='big').hex().upper():
+        print ("CRC check passed!")
+        return True
+    else:
+        print("CRC check Failed!")
+        return False
+
+####################################################
+
 def codec_8e_checker(codec8_packet): #does some basic check if codec is 8E, and passes it to parse function (checks must be improved later)
 	if str(codec8_packet[16:16+2]).upper() != "8E":	
 		print()	
 		print(f"Invalid packet!!!!!!!!!!!!!!!!!!!")		
 		return False
 	else:
-		return True
+		return crc16_arc(codec8_packet)
 
 def codec_parser_trigger(codec8_packet, device_imei):
 		try:			
