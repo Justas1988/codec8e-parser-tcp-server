@@ -25,8 +25,9 @@ AVL IDs and Raw values ar saved in ./data/data.json
 
 - Basic TCP communaction - must work correctly
 - Codec 8 Extended structure parsing - done!
-- Saving AVL IDs with RAW values to JSON - done!
+- Saving AVL IDs with RAW/Parsed values to JSON - done!
 - TCP Server and Parser functionality - done!
+- CRC16 checking to detect corupted packets - done!
 
 ## Planed Features - not done yet:
 
