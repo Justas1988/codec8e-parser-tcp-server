@@ -386,10 +386,10 @@ def parse_data_integer(data):
 	return int(data, 16)
 
 def int_multiply_01(data):
-	return decimal.Decimal(int(data, 16)) * decimal.Decimal('0.1')
+	return float(decimal.Decimal(int(data, 16)) * decimal.Decimal('0.1'))
 
 def int_multiply_0001(data):
-	return decimal.Decimal(int(data, 16)) * decimal.Decimal('0.001')
+	return float(decimal.Decimal(int(data, 16)) * decimal.Decimal('0.001'))
 
 
 
@@ -425,4 +425,8 @@ def sorting_hat(key, value):
 ####################################################
 
 
-input_trigger()
+def main():
+    input_trigger()
+
+if __name__ == "__main__":
+    main()
