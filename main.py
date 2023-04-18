@@ -58,7 +58,7 @@ def crc16_arc(data):
 
 ####################################################
 
-def codec_8e_checker(codec8_packet): #does some basic check if codec is 8E, and passes it to parse function (checks must be improved later)
+def codec_8e_checker(codec8_packet):
 	if str(codec8_packet[16:16+2]).upper() != "8E":	
 		print()	
 		print(f"Invalid packet!!!!!!!!!!!!!!!!!!!")		
