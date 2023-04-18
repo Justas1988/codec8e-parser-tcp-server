@@ -3,6 +3,7 @@ import json
 import os
 import datetime
 import struct
+import decimal
 
 HOST = socket.gethostbyname(socket.gethostname())  
 PORT = 7494  #change this to your port
@@ -207,7 +208,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 		data_field_position += len(speed)
 
 		event_io_id = avl_data_start[data_field_position:data_field_position+4]
-		io_dict["eventID"] = event_io_id		
+		io_dict["eventID"] = int(event_io_id, 16)		
 		print(f"event ID = {int(event_io_id, 16)}")
 		data_field_position += len(event_io_id)
 
@@ -385,10 +386,10 @@ def parse_data_integer(data):
 	return int(data, 16)
 
 def int_multiply_01(data):
-	return (int(data, 16))*0.1
+	return decimal.Decimal(int(data, 16)) * decimal.Decimal('0.1')
 
 def int_multiply_0001(data):
-	return (int(data, 16))*0.001
+	return decimal.Decimal(int(data, 16)) * decimal.Decimal('0.001')
 
 
 
