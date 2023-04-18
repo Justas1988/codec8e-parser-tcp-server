@@ -116,7 +116,7 @@ def start_server_tigger(): #triggers server
 		                    	device_imei = ascii_imei_converter(data.hex())
 		                    	imei_reply = (1).to_bytes(1, byteorder="big")
 		                    	conn.sendall(imei_reply)
-		                    	print(device_imei)
+		                    #	print(device_imei)
 		                    	print (f"-- {time_stamper()} sending reply = {imei_reply}")		                    	
 		                    elif codec_8e_checker(data.hex()) != False:
 		                    	record_number = codec_parser_trigger(data.hex(), device_imei)
@@ -159,7 +159,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 	data_field_position = 0
 	while data_field_position < (2*data_field_length-6):		
 		io_dict = {}
-		io_dict["deviceIMEI"] = device_imei
+		io_dict["device_IMEI"] = device_imei
 		io_dict["server_time"] = time_stamper()
 		print()
 		print (f"data from record {record_number}")	
@@ -167,6 +167,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 		timestamp = avl_data_start[data_field_position:data_field_position+16]
 		io_dict["_timestamp_"] = device_time_stamper(timestamp)
 		print (f"timestamp = {device_time_stamper(timestamp)}")	
+		io_dict["_rec_delay_"] = record_delay_counter(timestamp)
 		data_field_position += len(timestamp)
 
 		priority = avl_data_start[data_field_position:data_field_position+2]
@@ -322,8 +323,8 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 		except Exception as e:
 			print(f"JSON writing error occured = {e}")
 
-		print()
-		print(io_dict)
+	#	print()
+	#	print(io_dict)
 
 	total_records_parsed = int(avl_data_start[data_field_position:data_field_position+2], 16)
 	print()
@@ -351,6 +352,10 @@ def json_printer(io_dict): #function to write JSON file with data
 			file.write(json_data)
 	return
 
+####################################################
+###############____TIME_FUNCTIONS____###############
+####################################################
+
 def time_stamper():
 	current_server_time = datetime.datetime.now()
 	server_time_stamp = current_server_time.strftime("%H:%M:%S %d-%m-%Y")
@@ -366,6 +371,11 @@ def device_time_stamper(timestamp):
 	formatted_timestamp = f"{formatted_timestamp_local} (local) / {formatted_timestamp_utc} (utc)"
 
 	return formatted_timestamp
+
+def record_delay_counter(timestamp):
+	timestamp_ms = int(timestamp, 16) / 1000
+	current_server_time = datetime.datetime.now().timestamp()
+	return f"{int(current_server_time - timestamp_ms)} seconds"
 
 ####################################################
 ###############_PARSE_FUNCTIONS_CODE_###############
