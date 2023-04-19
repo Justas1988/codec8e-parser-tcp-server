@@ -161,7 +161,7 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 	while data_field_position < (2*data_field_length-6):		
 		io_dict = {}
 		io_dict["device_IMEI"] = device_imei
-		io_dict["server_time"] = time_stamper()
+		io_dict["server_time"] = time_stamper_for_json()
 		print()
 		print (f"data from record {record_number}")	
 		print (f"########################################")
@@ -358,8 +358,14 @@ def json_printer(io_dict): #function to write JSON file with data
 ####################################################
 
 def time_stamper():
+	current_server_time = datetime.datetime.now()	
+	server_time_stamp = current_server_time.strftime('%H:%M:%S %d-%m-%Y')
+	return server_time_stamp
+
+def time_stamper_for_json():
 	current_server_time = datetime.datetime.now()
-	server_time_stamp = current_server_time.strftime("%H:%M:%S %d-%m-%Y")
+	timestamp_utc = datetime.datetime.utcnow()
+	server_time_stamp = f"{current_server_time.strftime('%H:%M:%S %d-%m-%Y')} (local) / {timestamp_utc.strftime('%H:%M:%S %d-%m-%Y')} (utc)"
 	return server_time_stamp
 
 def device_time_stamper(timestamp):
