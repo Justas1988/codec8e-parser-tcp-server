@@ -424,7 +424,7 @@ def sorting_hat(key, value):
 		parse_function = parse_functions_dictionary[key]
 		return parse_function(value)
 	else:
-		return value	
+		return f"0x{value}"
 
 ####################################################
 
