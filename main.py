@@ -27,7 +27,7 @@ def input_trigger(): #triggers user input
 				print()
 				input_trigger()
 			else:
-				codec_parser_trigger(user_input, device_imei)
+				codec_parser_trigger(user_input, device_imei, "USER")
 		except Exception as e:
 			print(f"error occured: {e} enter proper Codec8E packet or EXIT!!!")
 			input_trigger()		
@@ -67,9 +67,9 @@ def codec_8e_checker(codec8_packet):
 	else:
 		return crc16_arc(codec8_packet)
 
-def codec_parser_trigger(codec8_packet, device_imei):
+def codec_parser_trigger(codec8_packet, device_imei, props):
 		try:			
-			return codec_8e_parser(codec8_packet, device_imei)
+			return codec_8e_parser(codec8_packet, device_imei, props)
 
 		except Exception as e:
 			print(f"Error occured: {e} enter proper Codec8E packet or EXIT!!!")
@@ -119,7 +119,7 @@ def start_server_tigger():
                             conn.sendall(imei_reply)
                             print(f"-- {time_stamper()} sending reply = {imei_reply}")
                         elif codec_8e_checker(data.hex()) != False:
-                            record_number = codec_parser_trigger(data.hex(), device_imei)
+                            record_number = codec_parser_trigger(data.hex(), device_imei, "SERVER")
                             print(f"received records {record_number}")
                             print(f"from device IMEI = {device_imei}")
                             print()
@@ -137,7 +137,7 @@ def start_server_tigger():
 ###############_Codec8E_parser_code_################
 ####################################################
 
-def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying  this function
+def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before modifying  this function
 	print()
 #	print (str("codec 8 string entered - " + codec_8E_packet))
 
@@ -322,14 +322,20 @@ def codec_8e_parser(codec_8E_packet, device_imei): #think a lot before modifying
 		except Exception as e:
 			print(f"JSON writing error occured = {e}")
 
-	#	print()
-	#	print(io_dict)
+	if props == "SERVER":	
 
-	total_records_parsed = int(avl_data_start[data_field_position:data_field_position+2], 16)
-	print()
-	print(f"total parsed records = {total_records_parsed}")
-	print()
-	return int(number_of_records)
+		total_records_parsed = int(avl_data_start[data_field_position:data_field_position+2], 16)
+		print()
+		print(f"total parsed records = {total_records_parsed}")
+		print()
+		return int(number_of_records)
+	
+	else:
+		total_records_parsed = int(avl_data_start[data_field_position:data_field_position+2], 16)
+		print()
+		print(f"total parsed records = {total_records_parsed}")
+		print()
+		input_trigger()
 
 ####################################################
 
