@@ -409,9 +409,16 @@ def parse_data_integer(data):
 def int_multiply_01(data):
 	return float(decimal.Decimal(int(data, 16)) * decimal.Decimal('0.1'))
 
+def int_multiply_001(data):
+	return float(decimal.Decimal(int(data, 16)) * decimal.Decimal('0.01')) 
+
 def int_multiply_0001(data):
 	return float(decimal.Decimal(int(data, 16)) * decimal.Decimal('0.001'))
 
+def signed_no_multiply(data):
+    binary = bytes.fromhex(data.zfill(4))
+    value = struct.unpack(">h", binary)[0]
+    return value
 
 
 parse_functions_dictionary = { #this must simply be updated with new AVL IDs and their functions
@@ -433,7 +440,14 @@ parse_functions_dictionary = { #this must simply be updated with new AVL IDs and
 	299: parse_data_integer,
 	16: parse_data_integer,
 	1: parse_data_integer,
-	9: parse_data_integer
+	9: parse_data_integer,
+	179: parse_data_integer,
+	12: int_multiply_0001,
+	13: int_multiply_001,
+	17: signed_no_multiply,
+	18: signed_no_multiply,
+	19: signed_no_multiply
+
 }
 
 def sorting_hat(key, value):
