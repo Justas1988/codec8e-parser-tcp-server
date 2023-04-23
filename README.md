@@ -4,7 +4,7 @@
 ![Eco Status](https://img.shields.io/badge/ECO-Friendly-green.svg)
 ![Alco Status](https://img.shields.io/badge/Contains-Alcohol-red.svg)
 
-# Teltonika TCP Server - Codec 8 Extended parser
+# Teltonika Codec 8 / Codec 8 Extended TCP Server and parser
 
 Personal Hobby project with Python.
 
@@ -25,13 +25,14 @@ AVL IDs and Raw values ar saved in ./data/data.json
 
 - Basic TCP communaction - must work correctly
 - Codec 8 Extended structure parsing - done!
+- Codec 8 structure parsing - done!
 - Saving AVL IDs with RAW/Parsed values to JSON - done!
 - TCP Server and Parser functionality - done!
 - CRC16 checking to detect corupted packets - done!
 
 ## Planed Features - not done yet:
 
-- Codec 8 (not extended support) - not done yet
+- Codec 8 (not extended support) - ~~not done yet~~ - done! More testing required
 - AVL IDs value parsing - ~~not done yet~~ - progress ongoing
 - User interface via Browser - not done yet
 - Limiting data.json file to X MB in size, and create new ones - not done yet
