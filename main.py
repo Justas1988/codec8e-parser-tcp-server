@@ -9,7 +9,7 @@ HOST = socket.gethostbyname(socket.gethostname())
 PORT = 7494  #change this to your port
 
 def input_trigger(): #triggers user input
-	print("Paste Codec 8E packet to parse it or:")
+	print("Paste full 'Codec 8' packet to parse it or:")
 	print("Type SERVER to start the server or:")
 	print("Type EXIT to stop the program")
 	device_imei = "default_IMEI"
@@ -23,13 +23,13 @@ def input_trigger(): #triggers user input
 	else:		
 		try:
 			if codec_8e_checker(user_input) == False:
-				print("Wrong input or invalid Codec8E packet")
+				print("Wrong input or invalid Codec8 packet")
 				print()
 				input_trigger()
 			else:
 				codec_parser_trigger(user_input, device_imei, "USER")
 		except Exception as e:
-			print(f"error occured: {e} enter proper Codec8E packet or EXIT!!!")
+			print(f"error occured: {e} enter proper Codec8 packet or EXIT!!!")
 			input_trigger()		
 
 ####################################################
@@ -73,7 +73,7 @@ def codec_parser_trigger(codec8_packet, device_imei, props):
 			return codec_8e_parser(codec8_packet, device_imei, props)
 
 		except Exception as e:
-			print(f"Error occured: {e} enter proper Codec8E packet or EXIT!!!")
+			print(f"Error occured: {e} enter proper Codec8 packet or EXIT!!!")
 			input_trigger()
 
 def imei_checker(hex_imei): #IMEI checker function
