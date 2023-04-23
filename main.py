@@ -22,7 +22,7 @@ def input_trigger(): #triggers user input
 		start_server_tigger()
 	else:		
 		try:
-			if codec_8e_checker(user_input) == False:
+			if codec_8e_checker(user_input.replace(" ","")) == False:
 				print("Wrong input or invalid Codec8 packet")
 				print()
 				input_trigger()
@@ -70,7 +70,7 @@ def codec_8e_checker(codec8_packet):
 
 def codec_parser_trigger(codec8_packet, device_imei, props):
 		try:			
-			return codec_8e_parser(codec8_packet, device_imei, props)
+			return codec_8e_parser(codec8_packet.replace(" ",""), device_imei, props)
 
 		except Exception as e:
 			print(f"Error occured: {e} enter proper Codec8 packet or EXIT!!!")
@@ -119,7 +119,7 @@ def start_server_tigger():
                             imei_reply = (1).to_bytes(1, byteorder="big")
                             conn.sendall(imei_reply)
                             print(f"-- {time_stamper()} sending reply = {imei_reply}")
-                        elif codec_8e_checker(data.hex()) != False:
+                        elif codec_8e_checker(data.hex().replace(" ","")) != False:
                             record_number = codec_parser_trigger(data.hex(), device_imei, "SERVER")
                             print(f"received records {record_number}")
                             print(f"from device IMEI = {device_imei}")
