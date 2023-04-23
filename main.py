@@ -61,7 +61,7 @@ def crc16_arc(data):
 ####################################################
 
 def codec_8e_checker(codec8_packet):
-	if str(codec8_packet[16:16+2]).upper() != "8E":	
+	if str(codec8_packet[16:16+2]).upper() != "8E" and str(codec8_packet[16:16+2]).upper() != "08":	
 		print()	
 		print(f"Invalid packet!!!!!!!!!!!!!!!!!!!")		
 		return False
@@ -151,6 +151,12 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 	codec_type = str(codec_8E_packet[16:16+2])
 	print (f"codec type = {codec_type}")
 
+	data_step = 4
+	if codec_type == "08":
+		data_step = 2
+	else:
+		pass
+
 	number_of_records = int(codec_8E_packet[18:18+2], 16)
 	print (f"number of records = {number_of_records}")
 
@@ -206,17 +212,17 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		print(f"speed = {int(speed, 16)}")
 		data_field_position += len(speed)
 
-		event_io_id = avl_data_start[data_field_position:data_field_position+4]
+		event_io_id = avl_data_start[data_field_position:data_field_position+data_step]
 		io_dict["eventID"] = int(event_io_id, 16)		
 		print(f"event ID = {int(event_io_id, 16)}")
 		data_field_position += len(event_io_id)
 
-		total_io_elements = avl_data_start[data_field_position:data_field_position+4]
+		total_io_elements = avl_data_start[data_field_position:data_field_position+data_step]
 		total_io_elements_parsed = int(total_io_elements, 16)
 		print(f"total I/O elements in record {record_number} = {total_io_elements_parsed}")
 		data_field_position += len(total_io_elements)
 
-		byte1_io_number = avl_data_start[data_field_position:data_field_position+4]
+		byte1_io_number = avl_data_start[data_field_position:data_field_position+data_step]
 		byte1_io_number_parsed = int(byte1_io_number, 16)
 		print(f"1 byte io count = {byte1_io_number_parsed}")
 		data_field_position += len(byte1_io_number)
@@ -225,7 +231,7 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		if byte1_io_number_parsed > 0:
 			i = 1				
 			while i <= byte1_io_number_parsed:
-				key = avl_data_start[data_field_position:data_field_position+4]
+				key = avl_data_start[data_field_position:data_field_position+data_step]
 				data_field_position += len(key)
 				value = avl_data_start[data_field_position:data_field_position+2]
 
@@ -236,7 +242,7 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		else:
 			pass
 
-		byte2_io_number = avl_data_start[data_field_position:data_field_position+4]
+		byte2_io_number = avl_data_start[data_field_position:data_field_position+data_step]
 		byte2_io_number_parsed = int(byte2_io_number, 16)
 		print(f"2 byte io count = {byte2_io_number_parsed}")
 		data_field_position += len(byte2_io_number)
@@ -244,7 +250,7 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		if byte2_io_number_parsed > 0:
 			i = 1
 			while i <= byte2_io_number_parsed:
-				key = avl_data_start[data_field_position:data_field_position+4]
+				key = avl_data_start[data_field_position:data_field_position+data_step]
 				data_field_position += len(key)
 
 				value = avl_data_start[data_field_position:data_field_position+4]
@@ -255,7 +261,7 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		else:
 			pass
 
-		byte4_io_number = avl_data_start[data_field_position:data_field_position+4]
+		byte4_io_number = avl_data_start[data_field_position:data_field_position+data_step]
 		byte4_io_number_parsed = int(byte4_io_number, 16)
 		print(f"4 byte io count = {byte4_io_number_parsed}")
 		data_field_position += len(byte4_io_number)
@@ -263,7 +269,7 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		if byte4_io_number_parsed > 0:
 			i = 1
 			while i <= byte4_io_number_parsed:
-				key = avl_data_start[data_field_position:data_field_position+4]
+				key = avl_data_start[data_field_position:data_field_position+data_step]
 				data_field_position += len(key)
 
 				value = avl_data_start[data_field_position:data_field_position+8]
@@ -274,7 +280,7 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		else:
 			pass
 
-		byte8_io_number = avl_data_start[data_field_position:data_field_position+4]
+		byte8_io_number = avl_data_start[data_field_position:data_field_position+data_step]
 		byte8_io_number_parsed = int(byte8_io_number, 16)
 		print(f"8 byte io count = {byte8_io_number_parsed}")
 		data_field_position += len(byte8_io_number)
@@ -282,7 +288,7 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		if byte8_io_number_parsed > 0:
 			i = 1
 			while i <= byte8_io_number_parsed:
-				key = avl_data_start[data_field_position:data_field_position+4]
+				key = avl_data_start[data_field_position:data_field_position+data_step]
 				data_field_position += len(key)
 
 				value = avl_data_start[data_field_position:data_field_position+16]
@@ -293,26 +299,30 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		else:
 			pass
 
-		byteX_io_number = avl_data_start[data_field_position:data_field_position+4]
-		byteX_io_number_parsed = int(byteX_io_number, 16)
-		print(f"X byte io count = {byteX_io_number_parsed}")
-		data_field_position += len(byteX_io_number)
+		if codec_type.upper() == "8E":
 
-		if byteX_io_number_parsed > 0:
-			i = 1
-			while i <= byteX_io_number_parsed:
-				key = avl_data_start[data_field_position:data_field_position+4]
-				data_field_position += len(key)
+			byteX_io_number = avl_data_start[data_field_position:data_field_position+4]
+			byteX_io_number_parsed = int(byteX_io_number, 16)
+			print(f"X byte io count = {byteX_io_number_parsed}")
+			data_field_position += len(byteX_io_number)
 
-				value_length = avl_data_start[data_field_position:data_field_position+4]
-				data_field_position += 4
-				value = avl_data_start[data_field_position:data_field_position+(2*(int(value_length, 16)))]
-				io_dict[int(key, 16)] = sorting_hat(int(key, 16), value)		
-				data_field_position += len(value)
-				print(f"avl_ID: {int(key, 16)} : {io_dict[int(key, 16)]}")
-			#	print (f"data field postition = {data_field_position}")
-			#	print (f"data_field_length = {2*data_field_length}")
-				i += 1
+			if byteX_io_number_parsed > 0:
+				i = 1
+				while i <= byteX_io_number_parsed:
+					key = avl_data_start[data_field_position:data_field_position+4]
+					data_field_position += len(key)
+
+					value_length = avl_data_start[data_field_position:data_field_position+4]
+					data_field_position += 4
+					value = avl_data_start[data_field_position:data_field_position+(2*(int(value_length, 16)))]
+					io_dict[int(key, 16)] = sorting_hat(int(key, 16), value)		
+					data_field_position += len(value)
+					print(f"avl_ID: {int(key, 16)} : {io_dict[int(key, 16)]}")
+				#	print (f"data field postition = {data_field_position}")
+				#	print (f"data_field_length = {2*data_field_length}")
+					i += 1
+			else:
+				pass
 		else:
 			pass
 
