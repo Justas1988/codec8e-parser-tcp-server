@@ -446,7 +446,13 @@ parse_functions_dictionary = { #this must simply be updated with new AVL IDs and
 	13: int_multiply_001,
 	17: signed_no_multiply,
 	18: signed_no_multiply,
-	19: signed_no_multiply
+	19: signed_no_multiply,
+	11: parse_data_integer,
+	10: parse_data_integer,
+	2: parse_data_integer,
+	3: parse_data_integer,
+	6: int_multiply_0001,
+	180: parse_data_integer
 
 }
 
