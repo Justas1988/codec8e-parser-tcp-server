@@ -37,6 +37,7 @@ AVL IDs and Raw values ar saved in ./data/data.json
 - User interface via Browser - not done yet
 - Limiting data.json file to X MB in size, and create new ones - not done yet
 - Make server multithreaded (code rewrite may be required) - not done yet
+- Implement required adjustments for Linux OS - not done yet
 - More... - not done yet
 
 ### How to test?:
