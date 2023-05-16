@@ -415,7 +415,7 @@ def int_multiply_001(data):
 def int_multiply_0001(data):
 	return float(decimal.Decimal(int(data, 16)) * decimal.Decimal('0.001'))
 
-def signed_no_multiply(data):
+def signed_no_multiply(data): #need more testing of this function
     try:
         binary = bytes.fromhex(data.zfill(8))
         value = struct.unpack(">i", binary)[0]
