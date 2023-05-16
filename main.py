@@ -416,9 +416,15 @@ def int_multiply_0001(data):
 	return float(decimal.Decimal(int(data, 16)) * decimal.Decimal('0.001'))
 
 def signed_no_multiply(data):
-    binary = bytes.fromhex(data.zfill(4))
-    value = struct.unpack(">h", binary)[0]
-    return value
+    try:
+        binary = bytes.fromhex(data.zfill(8))
+        value = struct.unpack(">i", binary)[0]
+        return value
+    except Exception as e:
+        print(f"unexpected value received in function '{data}' error: '{e}' will leave unparsed value!")
+        return f"0x{data}"
+
+	    
 
 
 parse_functions_dictionary = { #this must simply be updated with new AVL IDs and their functions
