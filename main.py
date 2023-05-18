@@ -53,6 +53,7 @@ def crc16_arc(data):
     
     if crc16_arc_from_record.upper() == crc.to_bytes(4, byteorder='big').hex().upper():
         print ("CRC check passed!")
+        print (f"Record length: {len(data)} characters // {int(len(data)/2)} bytes")
         return True
     else:
         print("CRC check Failed!")
@@ -80,7 +81,7 @@ def imei_checker(hex_imei): #IMEI checker function
 	imei_length = int(hex_imei[:4], 16)
 #	print(f"IMEI length = {imei_length}")
 	if imei_length != len(hex_imei[4:]) / 2:
-		print(f"Not an IMEI - length is not correct!")
+#		print(f"Not an IMEI - length is not correct!")
 		return False
 	else:
 		pass
