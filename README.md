@@ -23,7 +23,7 @@ AVL IDs and Raw values ar saved in ./data/data.json
 
 ## Project Features:
 
-- Basic TCP communaction - must work correctly
+- TCP communaction - done!
 - Codec 8 Extended structure parsing - done!
 - Codec 8 structure parsing - done!
 - Saving AVL IDs with RAW/Parsed values to JSON - done!
@@ -32,12 +32,13 @@ AVL IDs and Raw values ar saved in ./data/data.json
 
 ## Planed Features - not done yet:
 
-- Codec 8 (not extended support) - ~~not done yet~~ - done! More testing required
+- Codec 8 (not extended support) - ~~not done yet~~ - done!
 - AVL IDs value parsing - ~~not done yet~~ - progress ongoing
 - User interface via Browser - not done yet
 - Limiting data.json file to X MB in size, and create new ones - not done yet
 - Make server multithreaded (code rewrite may be required) - not done yet
 - Implement required adjustments for Linux OS - not done yet
+- Seprate .JSON files for different IMEIs - not done yet
 - More... - not done yet
 
 ### How to test?:
