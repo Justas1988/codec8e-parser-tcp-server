@@ -103,7 +103,7 @@ def start_server_tigger():
 		s.bind((HOST, PORT))
 		while True:
 			s.listen()
-			print(f"// {time_stamper()} // listening port {PORT}")
+			print(f"// {time_stamper()} // listening port {PORT} // IP: {HOST}")
 			conn, addr = s.accept()
 			conn.settimeout(20)
 			with conn:
@@ -185,7 +185,7 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		print()
 		print (f"data from record {record_number}")	
 		print (f"########################################")
-		
+
 		timestamp = avl_data_start[data_field_position:data_field_position+16]
 		io_dict["_timestamp_"] = device_time_stamper(timestamp)		
 		print (f"timestamp = {device_time_stamper(timestamp)}")	
