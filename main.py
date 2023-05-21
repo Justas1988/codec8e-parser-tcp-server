@@ -103,7 +103,7 @@ def start_server_tigger():
 		s.bind((HOST, PORT))
 		while True:
 			s.listen()
-			print(f"// {time_stamper()} // listening port {PORT} // IP: {HOST}")
+			print(f"// {time_stamper()} // listening port: {PORT} // IP: {HOST}")
 			conn, addr = s.accept()
 			conn.settimeout(20)
 			with conn:
@@ -240,8 +240,7 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		byte1_io_number = avl_data_start[data_field_position:data_field_position+data_step]
 		byte1_io_number_parsed = int(byte1_io_number, 16)
 		print(f"1 byte io count = {byte1_io_number_parsed}")
-		data_field_position += len(byte1_io_number)
-		
+		data_field_position += len(byte1_io_number)		
 
 		if byte1_io_number_parsed > 0:
 			i = 1				
@@ -457,10 +456,8 @@ def signed_no_multiply(data): #need more testing of this function
 		print(f"unexpected value received in function '{data}' error: '{e}' will leave unparsed value!")
 		return f"0x{data}"
 
-		
-
-
 parse_functions_dictionary = { #this must simply be updated with new AVL IDs and their functions
+	
 	240: parse_data_integer,
 	239: parse_data_integer,
 	80: parse_data_integer,
@@ -503,7 +500,6 @@ def sorting_hat(key, value):
 		return f"0x{value}"
 
 ####################################################
-
 
 def main():
 	input_trigger()

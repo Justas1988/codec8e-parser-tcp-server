@@ -2,7 +2,6 @@
 ![Python](https://img.shields.io/badge/Python-3.11.2-blue)
 ![Gluten Status](https://img.shields.io/badge/Gluten-Free-green.svg)
 ![Eco Status](https://img.shields.io/badge/ECO-Friendly-green.svg)
-![Alco Status](https://img.shields.io/badge/Contains-Alcohol-red.svg)
 
 # Teltonika Codec 8 / Codec 8 Extended TCP Server and parser
 
