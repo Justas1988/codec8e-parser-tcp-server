@@ -152,3 +152,4 @@ cython_debug/
 #.idea/
 data/data.json
 data/default_IMEI/default_IMEI_data.json
+data/default_IMEI/default_IMEI_RAWdata.json

@@ -164,17 +164,24 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 	record_number = 1
 	avl_data_start = codec_8E_packet[20:]
 	data_field_position = 0
-	while data_field_position < (2*data_field_length-6):		
+	while data_field_position < (2*data_field_length-6):	
+		io_dict_raw = {}	
 		io_dict = {}
 		io_dict["device_IMEI"] = device_imei
+		io_dict_raw["device_IMEI"] = device_imei
 		io_dict["server_time"] = time_stamper_for_json()
+		io_dict_raw["server_time"] = time_stamper_for_json()
 		print()
 		print (f"data from record {record_number}")	
 		print (f"########################################")
 		timestamp = avl_data_start[data_field_position:data_field_position+16]
 		io_dict["_timestamp_"] = device_time_stamper(timestamp)
+		io_dict_raw["_timestamp_"] = device_time_stamper(timestamp)
 		print (f"timestamp = {device_time_stamper(timestamp)}")	
 		io_dict["_rec_delay_"] = record_delay_counter(timestamp)
+		io_dict_raw["_rec_delay_"] = record_delay_counter(timestamp)
+		io_dict_raw["data_length"] = "Record length: " + str(int(len(codec_8E_packet))) + " characters" + " // " + str(int(len(codec_8E_packet) // 2)) + " bytes"
+		io_dict_raw["_raw_data__"] = codec_8E_packet
 		data_field_position += len(timestamp)
 
 		priority = avl_data_start[data_field_position:data_field_position+2]
@@ -331,6 +338,7 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		
 		try: #writing dictionary to ./data/data.json
 			json_printer(io_dict, device_imei)
+			json_printer_rawDATA(io_dict_raw, device_imei)
 		except Exception as e:
 			print(f"JSON writing error occured = {e}")
 
@@ -369,6 +377,24 @@ def json_printer(io_dict, device_imei): #function to write JSON file with data
 			file.write(json_data)
 	return
 
+def json_printer_rawDATA(io_dict_raw, device_imei): #function to write JSON file with data
+#	print (io_dict_raw)
+	json_data = json.dumps(io_dict_raw, indent=4)
+	data_path = "./data/" + str(device_imei)
+	json_file = str(device_imei) + "_RAWdata.json"
+
+	if not os.path.exists(data_path):
+		os.makedirs(data_path)
+	else:
+		pass
+
+	if not os.path.exists(os.path.join(data_path, json_file)):
+		with open(os.path.join(data_path, json_file), "w") as file:
+			file.write(json_data)
+	else:
+		with open(os.path.join(data_path, json_file), "a") as file:
+			file.write(json_data)
+	return
 ####################################################
 ###############____TIME_FUNCTIONS____###############
 ####################################################
