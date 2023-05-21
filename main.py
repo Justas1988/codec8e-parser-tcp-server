@@ -330,7 +330,7 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		record_number += 1
 		
 		try: #writing dictionary to ./data/data.json
-			json_printer(io_dict)
+			json_printer(io_dict, device_imei)
 		except Exception as e:
 			print(f"JSON writing error occured = {e}")
 
@@ -351,10 +351,10 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 
 ####################################################
 
-def json_printer(io_dict): #function to write JSON file with data
+def json_printer(io_dict, device_imei): #function to write JSON file with data
 	json_data = json.dumps(io_dict, indent=4)
-	data_path = "./data"
-	json_file = "data.json"
+	data_path = "./data/" + str(device_imei)
+	json_file = str(device_imei) + "_data.json"
 
 	if not os.path.exists(data_path):
 		os.makedirs(data_path)
