@@ -5,7 +5,7 @@ import datetime
 import struct
 import decimal
 
-HOST = socket.gethostbyname(socket.gethostname())  
+HOST = socket.gethostbyname(socket.gethostname())  #function may not work in Linux systems, change to string with IP adress example: "192.168.0.1"
 PORT = 7494  #change this to your port
 
 def input_trigger(): #triggers user input
@@ -105,7 +105,7 @@ def start_server_tigger():
 			s.listen()
 			print(f"// {time_stamper()} // listening port: {PORT} // IP: {HOST}")
 			conn, addr = s.accept()
-			conn.settimeout(20)
+			conn.settimeout(20) #connection timeout, change this value to close the socket if no DATA is received for X amount of seconds
 			with conn:
 				print(f"// {time_stamper()} // Connected by {addr}")
 				device_imei = "default_IMEI"
