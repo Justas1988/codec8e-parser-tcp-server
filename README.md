@@ -29,6 +29,7 @@ AVL IDs and Raw values ar saved in ./data/data.json
 - Saving AVL IDs with RAW/Parsed values to JSON - done!
 - TCP Server and Parser functionality - done!
 - CRC16 checking to detect corupted packets - done!
+- Added RAW DATA saving to separate .JSON
 
 ## Planed Features - not done yet:
 
