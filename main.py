@@ -37,27 +37,27 @@ def input_trigger(): #triggers user input
 ####################################################
 
 def crc16_arc(data):    
-    data_part_length_crc = int(data[8:16], 16)
-    data_part_for_crc = bytes.fromhex(data[16:16+2*data_part_length_crc])
-    crc16_arc_from_record = data[16+len(data_part_for_crc.hex()):24+len(data_part_for_crc.hex())]  
-    
-    crc = 0
-    
-    for byte in data_part_for_crc:
-        crc ^= byte
-        for _ in range(8):
-            if crc & 1:
-                crc = (crc >> 1) ^ 0xA001
-            else:
-                crc >>= 1
-    
-    if crc16_arc_from_record.upper() == crc.to_bytes(4, byteorder='big').hex().upper():
-        print ("CRC check passed!")
-        print (f"Record length: {len(data)} characters // {int(len(data)/2)} bytes")
-        return True
-    else:
-        print("CRC check Failed!")
-        return False
+	data_part_length_crc = int(data[8:16], 16)
+	data_part_for_crc = bytes.fromhex(data[16:16+2*data_part_length_crc])
+	crc16_arc_from_record = data[16+len(data_part_for_crc.hex()):24+len(data_part_for_crc.hex())]  
+	
+	crc = 0
+	
+	for byte in data_part_for_crc:
+		crc ^= byte
+		for _ in range(8):
+			if crc & 1:
+				crc = (crc >> 1) ^ 0xA001
+			else:
+				crc >>= 1
+	
+	if crc16_arc_from_record.upper() == crc.to_bytes(4, byteorder='big').hex().upper():
+		print ("CRC check passed!")
+		print (f"Record length: {len(data)} characters // {int(len(data)/2)} bytes")
+		return True
+	else:
+		print("CRC check Failed!")
+		return False
 
 ####################################################
 
@@ -98,43 +98,43 @@ def ascii_imei_converter(hex_imei):
 	return bytes.fromhex(hex_imei[4:]).decode()
 
 def start_server_tigger():
-    print("Starting server!")
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind((HOST, PORT))
-        while True:
-            s.listen()
-            print(f"// {time_stamper()} // listening port {PORT}")
-            conn, addr = s.accept()
-            conn.settimeout(20)
-            with conn:
-                print(f"// {time_stamper()} // Connected by {addr}")
-                device_imei = "default_IMEI"
-                while True:
-                    try:
-                        data = conn.recv(1280)
-                        print(f"// {time_stamper()} // data received = {data.hex()}")
-                        if not data:
-                            break
-                        elif imei_checker(data.hex()) != False:
-                            device_imei = ascii_imei_converter(data.hex())
-                            imei_reply = (1).to_bytes(1, byteorder="big")
-                            conn.sendall(imei_reply)
-                            print(f"-- {time_stamper()} sending reply = {imei_reply}")
-                        elif codec_8e_checker(data.hex().replace(" ","")) != False:
-                            record_number = codec_parser_trigger(data.hex(), device_imei, "SERVER")
-                            print(f"received records {record_number}")
-                            print(f"from device IMEI = {device_imei}")
-                            print()
-                            record_response = (record_number).to_bytes(4, byteorder="big")
-                            conn.sendall(record_response)
-                            print(f"// {time_stamper()} // response sent = {record_response.hex()}")
-                        else:
-                            print(f"// {time_stamper()} // no expected DATA received - dropping connection")
-                            break
-                    except socket.timeout:
-                        print(f"// {time_stamper()} // Socket timed out. Closing connection with {addr}")
-                        break
-                        	
+	print("Starting server!")
+	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+		s.bind((HOST, PORT))
+		while True:
+			s.listen()
+			print(f"// {time_stamper()} // listening port {PORT}")
+			conn, addr = s.accept()
+			conn.settimeout(20)
+			with conn:
+				print(f"// {time_stamper()} // Connected by {addr}")
+				device_imei = "default_IMEI"
+				while True:
+					try:
+						data = conn.recv(1280)
+						print(f"// {time_stamper()} // data received = {data.hex()}")
+						if not data:
+							break
+						elif imei_checker(data.hex()) != False:
+							device_imei = ascii_imei_converter(data.hex())
+							imei_reply = (1).to_bytes(1, byteorder="big")
+							conn.sendall(imei_reply)
+							print(f"-- {time_stamper()} sending reply = {imei_reply}")
+						elif codec_8e_checker(data.hex().replace(" ","")) != False:
+							record_number = codec_parser_trigger(data.hex(), device_imei, "SERVER")
+							print(f"received records {record_number}")
+							print(f"from device IMEI = {device_imei}")
+							print()
+							record_response = (record_number).to_bytes(4, byteorder="big")
+							conn.sendall(record_response)
+							print(f"// {time_stamper()} // response sent = {record_response.hex()}")
+						else:
+							print(f"// {time_stamper()} // no expected DATA received - dropping connection")
+							break
+					except socket.timeout:
+						print(f"// {time_stamper()} // Socket timed out. Closing connection with {addr}")
+						break
+							
 ####################################################
 ###############_Codec8E_parser_code_################
 ####################################################
@@ -142,6 +142,20 @@ def start_server_tigger():
 def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before modifying  this function
 	print()
 #	print (str("codec 8 string entered - " + codec_8E_packet))
+
+	io_dict_raw = {}
+#	timestamp = codec_8E_packet[20:36]	
+	io_dict_raw["device_IMEI"] = device_imei
+	io_dict_raw["server_time"] = time_stamper_for_json()
+#	io_dict_raw["_timestamp_"] = device_time_stamper(timestamp)
+#	io_dict_raw["_rec_delay_"] = record_delay_counter(timestamp)
+	io_dict_raw["data_length"] = "Record length: " + str(int(len(codec_8E_packet))) + " characters" + " // " + str(int(len(codec_8E_packet) // 2)) + " bytes"
+	io_dict_raw["_raw_data__"] = codec_8E_packet
+
+	try: #writing raw DATA dictionary to ./data/data.json
+		json_printer_rawDATA(io_dict_raw, device_imei)
+	except Exception as e:
+		print(f"JSON raw data writing error occured = {e}")
 
 	zero_bytes = codec_8E_packet[:8]
 	print()
@@ -164,30 +178,23 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 	record_number = 1
 	avl_data_start = codec_8E_packet[20:]
 	data_field_position = 0
-	while data_field_position < (2*data_field_length-6):	
-		io_dict_raw = {}	
+	while data_field_position < (2*data_field_length-6):				
 		io_dict = {}
-		io_dict["device_IMEI"] = device_imei
-		io_dict_raw["device_IMEI"] = device_imei
+		io_dict["device_IMEI"] = device_imei		
 		io_dict["server_time"] = time_stamper_for_json()
-		io_dict_raw["server_time"] = time_stamper_for_json()
 		print()
 		print (f"data from record {record_number}")	
 		print (f"########################################")
+		
 		timestamp = avl_data_start[data_field_position:data_field_position+16]
-		io_dict["_timestamp_"] = device_time_stamper(timestamp)
-		io_dict_raw["_timestamp_"] = device_time_stamper(timestamp)
+		io_dict["_timestamp_"] = device_time_stamper(timestamp)		
 		print (f"timestamp = {device_time_stamper(timestamp)}")	
-		io_dict["_rec_delay_"] = record_delay_counter(timestamp)
-		io_dict_raw["_rec_delay_"] = record_delay_counter(timestamp)
-		io_dict_raw["data_length"] = "Record length: " + str(int(len(codec_8E_packet))) + " characters" + " // " + str(int(len(codec_8E_packet) // 2)) + " bytes"
-		io_dict_raw["_raw_data__"] = codec_8E_packet
+		io_dict["_rec_delay_"] = record_delay_counter(timestamp)		
 		data_field_position += len(timestamp)
 
 		priority = avl_data_start[data_field_position:data_field_position+2]
 		io_dict["priority"] = int(priority, 16)
 		print (f"record priority = {int(priority, 16)}")
-
 		data_field_position += len(priority)
 
 		longtitude = avl_data_start[data_field_position:data_field_position+8]
@@ -338,7 +345,6 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		
 		try: #writing dictionary to ./data/data.json
 			json_printer(io_dict, device_imei)
-			json_printer_rawDATA(io_dict_raw, device_imei)
 		except Exception as e:
 			print(f"JSON writing error occured = {e}")
 
@@ -443,15 +449,15 @@ def int_multiply_0001(data):
 	return float(decimal.Decimal(int(data, 16)) * decimal.Decimal('0.001'))
 
 def signed_no_multiply(data): #need more testing of this function
-    try:
-        binary = bytes.fromhex(data.zfill(8))
-        value = struct.unpack(">i", binary)[0]
-        return value
-    except Exception as e:
-        print(f"unexpected value received in function '{data}' error: '{e}' will leave unparsed value!")
-        return f"0x{data}"
+	try:
+		binary = bytes.fromhex(data.zfill(8))
+		value = struct.unpack(">i", binary)[0]
+		return value
+	except Exception as e:
+		print(f"unexpected value received in function '{data}' error: '{e}' will leave unparsed value!")
+		return f"0x{data}"
 
-	    
+		
 
 
 parse_functions_dictionary = { #this must simply be updated with new AVL IDs and their functions
@@ -500,7 +506,7 @@ def sorting_hat(key, value):
 
 
 def main():
-    input_trigger()
+	input_trigger()
 
 if __name__ == "__main__":
-    main()
+	main()
