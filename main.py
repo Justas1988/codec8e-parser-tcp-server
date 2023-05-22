@@ -8,7 +8,8 @@ import decimal
 HOST = socket.gethostbyname(socket.gethostname())  #function may not work in Linux systems, change to string with IP adress example: "192.168.0.1"
 PORT = 7494  #change this to your port
 
-def input_trigger(): #triggers user input
+def input_trigger(): #triggers user input         
+		
 	print("Paste full 'Codec 8' packet to parse it or:")
 	print("Type SERVER to start the server or:")
 	print("Type EXIT to stop the program")
@@ -501,8 +502,29 @@ def sorting_hat(key, value):
 
 ####################################################
 
+def fileAccessTest(): #check if script can create files and folders
+	try: 
+		testDict = {}
+		testDict["_Writing_Test_"] = "Writing_Test"
+		testDict["Script_Started"] = time_stamper_for_json()
+
+		json_printer(testDict, "file_Write_Test")
+
+		print (f"---### File access test passed! ###---")
+		input_trigger()
+
+	except Exception as e:
+		print ()
+		print (f"---### File access error occured ###---")
+		print (f"'{e}'")
+		print (f"---### Try running terminal with Administrator rights! ###---")
+		print (f"---### Nothing will be saved if you decide to continue! ###---")
+		print ()
+		input_trigger()
+
+
 def main():
-	input_trigger()
+	fileAccessTest()
 
 if __name__ == "__main__":
 	main()
