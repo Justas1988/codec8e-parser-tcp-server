@@ -3,7 +3,7 @@
 ![Gluten Status](https://img.shields.io/badge/Gluten-Free-green.svg)
 ![Eco Status](https://img.shields.io/badge/ECO-Friendly-green.svg)
 
-# Teltonika Codec 8 / Codec 8 Extended TCP Server and parser
+# Teltonika Codec 8 / Codec 8 Extended TCP Server and Parser
 
 Personal Hobby project with Python.
 
@@ -14,9 +14,9 @@ Server waits for device to send IMEI then responds with "01", device then must s
 Codec 8 documentation can found via URL bellow:
 https://wiki.teltonika-gps.com/view/Codec
 
-Server - Device communication must work but not yet tested
+~~Server - Device communication must work but not yet tested~~ - works
 
-AVL IDs are parsed, AVL Data - not yet parsed
+AVL IDs are parsed, ~~AVL Data - not yet parsed~~ - partially parsed
 
 AVL IDs and Raw values ar saved in ./data/data.json
 
@@ -29,16 +29,18 @@ AVL IDs and Raw values ar saved in ./data/data.json
 - TCP Server and Parser functionality - done!
 - CRC16 checking to detect corupted packets - done!
 - RAW DATA saving to separate .JSON - done!
+- Seprate .JSON files for different IMEIs - done!
 
 ## Planed Features - not done yet:
 
 - Codec 8 (not extended support) - ~~not done yet~~ - done!
 - AVL IDs value parsing - ~~not done yet~~ - progress ongoing
+- Beacon list: AVL 385 parsing - planing soon waiting for bad weather
 - User interface via Browser - not done yet
 - Limiting data.json file to X MB in size, and create new ones - not done yet
 - Make server multithreaded (code rewrite may be required) - not done yet
 - Implement required adjustments for Linux OS - not done yet
-- Seprate .JSON files for different IMEIs - not done yet
+- Seprate .JSON files for different IMEIs - ~~not done yet~~ - done!
 - More... - not done yet
 
 ### How to test?:

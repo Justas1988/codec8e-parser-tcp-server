@@ -153,3 +153,4 @@ cython_debug/
 data/data.json
 data/default_IMEI/default_IMEI_data.json
 data/default_IMEI/default_IMEI_RAWdata.json
+data/file_Write_Test/file_Write_Test_data.json
