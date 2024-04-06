@@ -35,11 +35,7 @@ AVL IDs and Raw values ar saved in ./data/data.json
 
 - Codec 8 (not extended support) - ~~not done yet~~ - done!
 - AVL IDs value parsing - ~~not done yet~~ - progress ongoing
-- Beacon list: AVL 385 parsing - planing soon waiting for bad weather
-- User interface via Browser - not done yet
-- Limiting data.json file to X MB in size, and create new ones - not done yet
 - Make server multithreaded (code rewrite may be required) - not done yet
-- Implement required adjustments for Linux OS - not done yet
 - Seprate .JSON files for different IMEIs - ~~not done yet~~ - done!
 - More... - not done yet
 
