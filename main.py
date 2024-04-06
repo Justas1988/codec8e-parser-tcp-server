@@ -20,7 +20,7 @@ def input_trigger(): #triggers user input
 		exit()	
 
 	elif user_input.upper() == "SERVER":
-		start_server_tigger()
+		start_server_trigger()
 	else:		
 		try:
 			if codec_8e_checker(user_input.replace(" ","")) == False:
@@ -98,7 +98,7 @@ def imei_checker(hex_imei): #IMEI checker function
 def ascii_imei_converter(hex_imei):
 	return bytes.fromhex(hex_imei[4:]).decode()
 
-def start_server_tigger():
+def start_server_trigger():
 	print("Starting server!")
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 		s.bind((HOST, PORT))
@@ -198,10 +198,10 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		print (f"record priority = {int(priority, 16)}")
 		data_field_position += len(priority)
 
-		longtitude = avl_data_start[data_field_position:data_field_position+8]
-		io_dict["longtitude"] = struct.unpack('>i', bytes.fromhex(longtitude))[0]
-		print (f"longtitude = {struct.unpack('>i', bytes.fromhex(longtitude))[0]}")
-		data_field_position += len(longtitude)
+		longitude = avl_data_start[data_field_position:data_field_position+8]
+		io_dict["longitude"] = struct.unpack('>i', bytes.fromhex(longitude))[0]
+		print (f"longitude = {struct.unpack('>i', bytes.fromhex(longitude))[0]}")
+		data_field_position += len(longitude)
 
 		latitude = avl_data_start[data_field_position:data_field_position+8]
 		print (f"latitude = {struct.unpack('>i', bytes.fromhex(latitude))[0]}")
