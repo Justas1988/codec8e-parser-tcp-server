@@ -199,13 +199,17 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		data_field_position += len(priority)
 
 		longitude = avl_data_start[data_field_position:data_field_position+8]
-		io_dict["longitude"] = struct.unpack('>i', bytes.fromhex(longitude))[0]
-		print (f"longitude = {struct.unpack('>i', bytes.fromhex(longitude))[0]}")
+	#	io_dict["longitude"] = struct.unpack('>i', bytes.fromhex(longitude))[0]
+	#	print (f"longitude = {struct.unpack('>i', bytes.fromhex(longitude))[0]}")
+		io_dict["longitude"] = coordinate_formater(longitude)
+		print (f"longitude = {coordinate_formater(longitude)}")
 		data_field_position += len(longitude)
 
 		latitude = avl_data_start[data_field_position:data_field_position+8]
-		print (f"latitude = {struct.unpack('>i', bytes.fromhex(latitude))[0]}")
-		io_dict["latitude"] = struct.unpack('>i', bytes.fromhex(latitude))[0]
+	#	print (f"latitude = {struct.unpack('>i', bytes.fromhex(latitude))[0]}")
+	#	io_dict["latitude"] = struct.unpack('>i', bytes.fromhex(latitude))[0]
+		io_dict["latitude"] = coordinate_formater(latitude)
+		print (f"latitude = {coordinate_formater(latitude)}")
 		data_field_position += len(latitude)
 
 		altitude = avl_data_start[data_field_position:data_field_position+4]
@@ -363,6 +367,27 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 		print()
 		input_trigger()
 
+####################################################
+###############_End_of_MAIN_Parser_Code#############
+####################################################
+
+####################################################
+###############_Coordinates_Function_###############
+####################################################
+
+def coordinate_formater(hex_coordinate): #may return too large longitude need to test this more
+	coordinate = int(hex_coordinate, 16)
+	dec_coordinate = coordinate / 10000000
+	if coordinate & (1 << 31):
+		dec_coordinate *= -1
+	else:
+		pass
+	return dec_coordinate
+
+
+
+####################################################
+###############____JSON_Functions____###############
 ####################################################
 
 def json_printer(io_dict, device_imei): #function to write JSON file with data
