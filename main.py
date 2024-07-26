@@ -375,14 +375,14 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 ###############_Coordinates_Function_###############
 ####################################################
 
-def coordinate_formater(hex_coordinate): #may return too large longitude need to test this more
-	coordinate = int(hex_coordinate, 16)
-	dec_coordinate = coordinate / 10000000
-	if coordinate & (1 << 31):
-		dec_coordinate *= -1
-	else:
-		pass
-	return dec_coordinate
+def coordinate_formater(self, hex_coordinate): # Fixed :), hopefuly this works for you too - https://stackoverflow.com/questions/36506910/convert-integer-to-lat-long-geo-position
+        coordinate = int(hex_coordinate, 16)
+        if coordinate & (1 << 31):
+            new_int = coordinate - 2**32
+            dec_coordinate = new_int/1e7
+        else:
+            dec_coordinate = coordinate / 10000000
+        return dec_coordinate
 
 
 
