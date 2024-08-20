@@ -375,7 +375,7 @@ def codec_8e_parser(codec_8E_packet, device_imei, props): #think a lot before mo
 ###############_Coordinates_Function_###############
 ####################################################
 
-def coordinate_formater(self, hex_coordinate): # Fixed :), hopefuly this works for you too - https://stackoverflow.com/questions/36506910/convert-integer-to-lat-long-geo-position
+def coordinate_formater(hex_coordinate): # Fixed :), hopefuly this works for you too - https://stackoverflow.com/questions/36506910/convert-integer-to-lat-long-geo-position
         coordinate = int(hex_coordinate, 16)
         if coordinate & (1 << 31):
             new_int = coordinate - 2**32
